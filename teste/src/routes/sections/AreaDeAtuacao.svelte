@@ -47,8 +47,13 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
     })
     $: options = {
   title: {
-    text: 'destaques',
-    left: 'center'
+    text: 'Áreas de destaques dos membros',
+    left: 'center',
+    textStyle : {
+      fontSize:22,
+      fontWeight: 'bolder'
+    }
+
   },
   tooltip: {
     trigger: 'item'
@@ -56,7 +61,10 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
   yAxis: {
     type: 'category',
     data: nomesAgentes,
-    inverse: true
+    inverse: true,
+    axisLabel : {
+      fontSize : 20
+    }
   },
   xAxis: {
     type: 'value',
@@ -81,8 +89,12 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
 
 $: optionEspaco = {
   title: {
-    text: 'destaques',
-    left: 'center'
+    text: 'Áreas de destaques dos locais',
+    left: 'center',
+    textStyle : {
+      fontSize:22,
+      fontWeight: 'bolder'
+    }
   },
   tooltip: {
     trigger: 'item'
@@ -90,7 +102,10 @@ $: optionEspaco = {
   yAxis: {
     type: 'category',
     data: nomesLocais,
-    inverse : true
+    inverse : true,
+    axisLabel : {
+      fontSize: 20
+    }
   },
   xAxis: {
     type: 'value',
@@ -112,7 +127,7 @@ $: optionEspaco = {
     containLabel: true
   }
 };
-let torelance = 26
+let torelance = 12
 </script>
 <div class="segurarAmbos">
     <div class="container">
@@ -124,11 +139,11 @@ let torelance = 26
         <ul>
           {#each restanteAgentes as atual,i}
             {#if i<torelance}
-              <li>{atual.name} <br/>({atual.value}%)</li>
+              <li>{atual.name} &emsp &emsp<span>({atual.value}%)</span></li>
             {/if}
           {/each}
-          <li>...</li>
         </ul>
+        <p>...</p>
       </div>
     </div>
     <div class="container" id="segundo" >
@@ -140,31 +155,43 @@ let torelance = 26
         <ul>
           {#each restanteLocais as atual,i}
           {#if i<torelance}
-            <li>{atual.name} <br/>({atual.value}%)</li>
+            <li>{atual.name} &emsp &emsp<span>({atual.value}%)</span></li>
           {/if}
           {/each}
-          <li>...</li>
         </ul>
+        <p>...</p>
       </div>
     </div>
 </div>
 <style>
+  h2{
+    font-size: 28px;
+    margin: 0px;
+    padding-bottom: 10px;
+  }
   ul{
-    -moz-column-count: 3;
-    -moz-column-gap: 10%;
-    -webkit-column-count: 3;
-    -webkit-column-gap: 10%;
-    column-count: 3;
-    column-gap: 10%;
-    height: 100%;
-    width: 70%;
+    padding: 0px;
+    margin-bottom: 0px;
+  }
+  li span{
+    float: right;
+  }
+  p{
+    text-align: center;
+    margin: 0px;
+    font-size: 24px;
+    font-weight: bold;
   }
   li {
-    font-size: 16px;
+    font-size: 24px;
+    margin-bottom: 3px;
+    text-align: left;
+    list-style-type: none;
   }
     .chartContainer {
+      padding-top: 0.5%;
       height: 100%;
-      width: 30%;
+      width: 50%;
     }
     #segundo{
         margin-left: 20px;
