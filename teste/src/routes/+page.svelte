@@ -140,14 +140,14 @@
 div.autocomplete{
 	position: relative;
 	display: inline-block;
-	width: 300px;
+	width: 25%;
 }
 input {
 	margin: 10px;
 	border: 1px solid transparent;
 	background-color: white;
 	padding: 10px;
-	font-size: 16px;
+	font-size: 20px;
 	font-family: 'Times New Roman', Times, serif;
 }
 input[type=text] {
@@ -167,8 +167,8 @@ input[type=submit]{
 	margin-left: 10px;
 	margin-top: 10px;
 	padding: 0;
-	top: 50px;
-	width: 297px;
+	top: 45px;
+	width: 26%;
 	border: 1px solid #ddd;
 	background-color: #ddd;
 }	

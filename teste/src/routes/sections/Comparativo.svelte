@@ -28,7 +28,7 @@
     })
     let titulos
     $:titulos = [...semelhantes.slice(0,-1),municipio]
-    $:console.log(titulos)
+    //$:console.log(titulos)
     $: options = {
   title: {
     text: "comparativo municipios semelhantes",

@@ -3,6 +3,7 @@
 
 
 
+
 	import { Chart } from "svelte-echarts";
 import {tratarDadosInteresse } from "./scripts/PuxarDados";
     /**
@@ -18,6 +19,9 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
 	 * @type {String[] | { name: String; value: string; }}
 	 */
     let valoresAgentes
+    /**
+	 * @type {string | any[]}
+	 */
     let restanteAgentes = []
 
     /**
@@ -28,6 +32,9 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
 	 * @type {String[] | { name: String; value: string; }}
 	 */
     let valoresLocais
+    /**
+	 * @type {string | any[]}
+	 */
     let restanteLocais = []
     $: tratarDadosInteresse(municipio, "agent").then((Response)=>{
         // @ts-ignore
@@ -128,9 +135,20 @@ $: optionEspaco = {
   }
 };
 let torelance = 12
+
+
+function inverterLados (opcao){
+  let temp = opcao.xAxis
+  opcao.xAxis = opcao.yAxis
+  opcao.yAxis = temp
+  return opcao
+}
+
+
 </script>
 <div class="segurarAmbos">
     <div class="container">
+      {#if restanteAgentes.length>0}
       <div class = "chartContainer">
         <Chart {options}/>
       </div>
@@ -145,8 +163,14 @@ let torelance = 12
         </ul>
         <p>...</p>
       </div>
+      {:else}
+      <div class="reserva">
+        <Chart options = {inverterLados(options)}/>
+      </div>
+      {/if}
     </div>
     <div class="container" id="segundo" >
+      {#if restanteLocais.length > 0}
       <div class="chartContainer">
         <Chart options={optionEspaco}/>
       </div>
@@ -161,9 +185,18 @@ let torelance = 12
         </ul>
         <p>...</p>
       </div>
+      {:else}
+      <div class="reserva">
+        <Chart options = {inverterLados(optionEspaco)}/>
+      </div>
+      {/if}
     </div>
 </div>
 <style>
+  .reserva{
+    height: 100%;
+    width: 100%;
+  }
   h2{
     font-size: 28px;
     margin: 0px;
