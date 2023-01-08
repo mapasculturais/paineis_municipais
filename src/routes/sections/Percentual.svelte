@@ -7,6 +7,8 @@
 
     import { Chart } from 'svelte-echarts'
 	  import { acharporcentagens } from './scripts/AcharPorcentagens';
+	import { MESO } from './scripts/CONSTANTS/MESO';
+	import { MICRO } from './scripts/CONSTANTS/MICRO';
 
 
     /**
@@ -19,7 +21,7 @@
     let options
     $: options = {
       title :{
-        text: " % participação de "+ municipio +" x % populacao de "+municipio,
+        text: municipio+ " em relação a "+ MESO.get(MICRO.get(municipio)),
         left: "center",
         textStyle : {
           fontSize : "auto"
@@ -33,7 +35,7 @@
       },
     xAxis: {
     type: 'category',
-    data: ['% participação','% populacao']
+    data: ['% participação mapas','% populacao']
     },
     yAxis: {
     type: 'value'
@@ -71,7 +73,20 @@
 </div>
 
 <style>
-	.container {
+
+@media only screen and (max-width: 600px) {
+  .container {
+		width: 95%;
+		height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    margin-left: 2.5%;
+    margin-top: 5px;
+	}
+	}
+  
+  @media only screen and (min-width: 600px) {
+    .container {
     margin-top: 15px;
 		width: 500px;
 		height: 500px;
@@ -81,4 +96,9 @@
     margin-left: 5px;
     margin-right: 5px;
 	}
+	}
+  
+
+
+	
 </style>

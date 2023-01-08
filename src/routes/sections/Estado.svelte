@@ -85,6 +85,11 @@ import { element } from "svelte/internal";
   ]
 };
 </script>
+<div class="descricao">
+  <h1>Analise estadual</h1>
+  <p>Aqui está a análise dos números brutos de agentes individuais e coletivos inscritos, também como o número de espaços cadastrados, tais dados quando acossiados a um municipio são apresentados no gráfico abaixo ordenados de maior número de agentes individuais para menor( dado mais número do mapas)</p>
+</div>
+
 <div class="organize">
     <div class="info">
         <h1>número de agentes individuais</h1>
@@ -95,7 +100,7 @@ import { element } from "svelte/internal";
         <h3>{dadosTitulos[1]}</h3>
     </div>
     <div class="info">
-        <h1>número de locais</h1>
+        <h1>número de Espacos</h1>
         <h3>{dadosTitulos[2]}</h3>
     </div>
 </div>
@@ -108,7 +113,50 @@ import { element } from "svelte/internal";
 
 
 <style>
+  .descricao {
+    text-align: center;
+  }
+.info h1{
+        margin: 0px;
+        font-weight: 300;
+        text-align: center;
+    }
+.info h3{
+        margin: 0px;
+        text-align: center;
+        font-size: 60px;
+        font-weight: 200;
+}
+@media only screen and (max-width: 600px) {
+  .organize{
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        align-items: center;
+        
+    }
+    .info{
+        width: 95%;
+        background-color: white;
+        padding: 5px;
+        margin: 5px 5px 0px 5px;
+        border-radius: 15px;
+    }
     .container {
+    align-self: center;
+    padding: 0;
+    margin-top: 5px;
+	  width: 95%;
+	  height: 300px;
+    background-color: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
+
+	}
+} 
+
+@media only screen and (min-width: 600px) {
+  .container {
     padding: 0;
     margin-top: 5px;
 	  width: 1550px;
@@ -123,13 +171,14 @@ import { element } from "svelte/internal";
     margin-bottom: 20px;
 
 	}
-    .organize{
+  .organize{
         display: flex;
         flex-direction: row;
         margin-left: 5px;
         margin-right: 5px;
         
     }
+    
     .info{
         min-width: 550px;
         background-color: white;
@@ -137,15 +186,8 @@ import { element } from "svelte/internal";
         margin: 15px 5px 5px 5px;
         border-radius: 15px;
     }
-    .info h1{
-        margin: 0px;
-        font-weight: 300;
-        text-align: center;
-    }
-    .info h3{
-        margin: 0px;
-        text-align: center;
-        font-size: 60px;
-        font-weight: 200;
-    }
+    
+}
+
+    
 </style>

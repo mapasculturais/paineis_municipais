@@ -1,6 +1,4 @@
 import axios from "axios"
-import { number } from "echarts"
-import { element } from "svelte/internal"
 import { MUNICIPIOS } from "./CONSTANTS/MUNICIPIOS"
 
 
@@ -44,12 +42,12 @@ async function interessesMuni(municipio:string, tipo : string) {
         '@select' : 'terms',
         'geoMunicipio' : 'EQ('+municipio+')'
     }})
-    let dados = await p1
-    let mapaInteresses = new Map <String,number>() 
-    let total = dados.data.length
+    const dados = await p1
+    const mapaInteresses = new Map <string,number>() 
+    const total = dados.data.length
     dados.data.forEach((dado: any) =>{
-        let atual = dado.terms.area
-        atual.forEach((interesseAtual: String) =>{
+        const atual = dado.terms.area
+        atual.forEach((interesseAtual: string) =>{
             let valor : number
             if(mapaInteresses.get(interesseAtual)!==undefined){
                 valor = mapaInteresses.get(interesseAtual)!
@@ -62,29 +60,32 @@ async function interessesMuni(municipio:string, tipo : string) {
     return [mapaInteresses,total]
 }
 async function tratarDadosInteresse(lugar :string, tipo: string) {
-    let mapa = new Map <String,number>()
+    let mapa = new Map <string,number>()
     let total : number
     if(lugar!=="ESTADO"){
-        let resultado = await interessesMuni(lugar,tipo)
+        const resultado = await interessesMuni(lugar,tipo)
         mapa = resultado[0]
         total = resultado[1]
     }else{
         //depois tenho que ver como vou fazer o request pra estado, os testes estão dando errado
     }
-    let dados = Array.from(mapa, ([name, value]) => ({ name, value}));
+    const dados = Array.from(mapa, ([name, value]) => ({ name, value}));
     dados.sort((a,b)=>b.value-a.value)
     
-    let destaquesNomes: String[] = []
-    let destaquesValores: string[] = []
-    let outros: { name: String; value: string }[] = []
-
-    dados.forEach((dado,index,objeto)=>{
-        let individual = {
+    const destaquesNomes: string[] = []
+    const destaquesValores: string[] = []
+    const outros: { name: string; value: string }[] = []
+    let index = 0
+    dados.forEach((dado)=>{
+        index = index+1
+        const individual = {
             name: dado.name,
             value: ((dado.value/total)*100).toFixed(2)
         }
-        if(individual.name!=="Outros")
-        if(Number(individual.value)>10){
+        if(individual.name==="Outros"){
+            index=index-1
+        }
+        else if(index<10){
             destaquesNomes.push(individual.name)
             destaquesValores.push(individual.value)
         }else{
@@ -163,9 +164,9 @@ async function numerosSemelhantes(listaMunis :string[]) {
 async function dadosBrutosEstado() {
     //vai chamar todos os dados da api, ordenar por numero de agetes individuis e devolver um array no formato [[array municipios na ordem],[array agentes individuais],[array agente coletivos],[arrays espacos]]
     //lista de elementos [nome, agentInd,agenteConj,]
-    let listaPersonalizada: {lugar : string , agentesInd : number , agentesColet : number , espacos : number} []  = []
+    const listaPersonalizada: {lugar : string , agentesInd : number , agentesColet : number , espacos : number} []  = []
     MUNICIPIOS.forEach((muni)=>{
-        let ind = {lugar : muni, agentesInd : 0, agentesColet: 0, espacos: 0}
+        const ind = {lugar : muni, agentesInd : 0, agentesColet: 0, espacos: 0}
         listaPersonalizada.push(ind)
     })
 
@@ -185,31 +186,31 @@ async function dadosBrutosEstado() {
             }})
     const dataTotal = await Promise.all([p1,p2,p3])
     dataTotal[0].data.forEach((element: {id : number , geoMunicipio : string}) => {
-        let index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
+        const index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
         listaPersonalizada[index].agentesInd+=1
     });
     dataTotal[1].data.forEach((element: {id : number , geoMunicipio : string}) => {
-        let index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
+        const index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
         listaPersonalizada[index].agentesColet+=1
     });
     dataTotal[2].data.forEach((element: {id : number , geoMunicipio : string}) => {
-        let index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
+        const index = acharIndexElemento(listaPersonalizada, element.geoMunicipio)
         listaPersonalizada[index].espacos+=1
     });
     listaPersonalizada.sort(function(a, b){
         return b.agentesInd - a.agentesInd 
     })
-    let listaA: string[] = []
-    let listaB: number[] = []
-    let listaC: number[] = []
-    let listaD: number[] = []
+    const listaA: string[] = []
+    const listaB: number[] = []
+    const listaC: number[] = []
+    const listaD: number[] = []
     listaPersonalizada.forEach(element =>{
         listaA.push(element.lugar)
         listaB.push(element.agentesInd)
         listaC.push(element.agentesColet)
         listaD.push(element.espacos)
     })
-    let listaFinal = []
+    const listaFinal = []
     listaFinal.push(listaA)
     listaFinal.push(listaB)
     listaFinal.push(listaC)
@@ -227,9 +228,9 @@ function acharIndexElemento(lista: {lugar : string , agentesInd : number , agent
 }
 
 async function todosDadosEstado() {
-    let p1 = numerosDadosEstado()
-    let p2 = dadosBrutosEstado()
-    let resultado = await Promise.all([p1,p2])
+    const p1 = numerosDadosEstado()
+    const p2 = dadosBrutosEstado()
+    const resultado = await Promise.all([p1,p2])
     return resultado
 }
 export {tratarDadosInteresse , interessesMuni, numeroDadosMuni,numeroDadosMeso,numerosSemelhantes, numerosDadosEstado, dadosBrutosEstado, todosDadosEstado}

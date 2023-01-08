@@ -1,6 +1,7 @@
 <script>
-// @ts-nocheck
+	
 
+// @ts-nocheck
 
 
    
@@ -28,18 +29,35 @@
     })
     let titulos
     $:titulos = [...semelhantes.slice(0,-1),municipio]
-    //$:console.log(titulos)
+    //tamanhos padrões das fontes de opções
+    let tamanhos = [15,8,12]
+
+    if(window.innerWidth>=600){
+      tamanhos = [30,12,20]
+    }
+    
+
+    
+    
     $: options = {
   title: {
     text: "comparativo municipios semelhantes",
-    left: "center"
+    left: "center",
+    textStyle: {
+      fontSize: tamanhos[0],
+    },
+    padding: [2, 0,15, 0]
   },
   xAxis: {
     type: 'category',
     inverse: true,
     data: titulos,
     axisLabel : {
-      interval: 0
+      interval: 0,
+      textStyle: {
+        color: 'black',
+        fontSize: tamanhos[1]
+      }
     }
   },
   yAxis: {
@@ -47,7 +65,10 @@
   },
   legend: {
     show: true,
-    top: "25px"
+    top: "30px",
+    textStyle: {
+      fontSize: tamanhos[2],
+    }
   },
   tooltip: {
     trigger: 'axis',
@@ -91,13 +112,26 @@
 };
 
 </script>
-
 <div class="container">
   <Chart {options} />
 </div>
 
+
+
 <style>
-	.container {
+  @media only screen and (max-width: 600px) {
+    .container {
+    padding: 0;
+    margin-top: 5px;
+		width: 95%;
+    margin-left: 2.5%;
+		height: 450px;
+    background-color: white;
+    border-radius: 15px;
+	}
+  }
+  @media only screen and (min-width: 600px) {
+    .container {
     padding: 0;
     margin-top: 5px;
 		width: 1150px;
@@ -110,4 +144,6 @@
     margin-bottom: 20px;
     padding-bottom: 5px;
 	}
+  }
+	
 </style>
