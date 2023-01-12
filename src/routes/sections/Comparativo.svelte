@@ -32,7 +32,7 @@
     //tamanhos padrões das fontes de opções
     let tamanhos = [15,8,12]
 
-    if(window.innerWidth>=600){
+    if(window.innerWidth>=768){
       tamanhos = [30,12,20]
     }
     
@@ -52,12 +52,11 @@
     type: 'category',
     inverse: true,
     data: titulos,
+    color: 'black',
+    fontSize: tamanhos[1],
     axisLabel : {
       interval: 0,
-      textStyle: {
-        color: 'black',
-        fontSize: tamanhos[1]
-      }
+      
     }
   },
   yAxis: {
@@ -119,7 +118,7 @@
 
 
 <style>
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 768px) {
     .container {
     padding: 0;
     margin-top: 5px;
@@ -130,20 +129,31 @@
     border-radius: 15px;
 	}
   }
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width: 768px) {
     .container {
     padding: 0;
     margin-top: 5px;
-		width: 1150px;
+		width: 98%;
+    margin-left: 1%;
+		height: 450px;
+    background-color: white;
+    border-radius: 15px;
+    }
+  }
+  @media only screen and (min-width: 1200px) {
+    .container {
+    padding: 0;
+    margin-top: 5px;
+		width: 99%;
 		height: 575px;
     padding-top: 10px;
-    padding-left: 30px;
-    margin-left: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
     background-color: white;
     border-radius: 15px;
     margin-bottom: 20px;
     padding-bottom: 5px;
 	}
-  }
+  } 
 	
 </style>

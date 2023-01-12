@@ -35,7 +35,11 @@
       },
     xAxis: {
     type: 'category',
-    data: ['% participação mapas','% populacao']
+    data: ['% participação mapas','% populacao'],
+    axisLabel : {
+      interval: 0,
+      
+    }
     },
     yAxis: {
     type: 'value'
@@ -74,7 +78,7 @@
 
 <style>
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .container {
 		width: 95%;
 		height: 400px;
@@ -85,19 +89,29 @@
 	}
 	}
   
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width: 768px) {
+    .container {
+		width: 48%;
+		height: 250px;
+    background-color: white;
+    border-radius: 15px;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 5px;
+	}
+	}
+  @media only screen and (min-width: 1200px) {
     .container {
     margin-top: 15px;
-		width: 500px;
-		height: 500px;
-    padding: 15px 15px 0px 15px;
+		width: 100%;
+		height: 450px;
+    padding-top: 15px;
     background-color: white;
     border-radius: 15px;
     margin-left: 5px;
     margin-right: 5px;
 	}
-	}
-  
+} 
 
 
 	

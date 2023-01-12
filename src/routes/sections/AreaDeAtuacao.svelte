@@ -14,7 +14,7 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
     /**
 	 * @type {String[] | { name: String; value: string; }}
 	 */
-    let nomesAgentes
+    let nomesAgentes = []
     /**
 	 * @type {String[] | { name: String; value: string; }}
 	 */
@@ -27,7 +27,7 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
     /**
 	 * @type {String[] | { name: String; value: string; }}
 	 */
-    let nomesLocais
+    let nomesLocais = []
     /**
 	 * @type {String[] | { name: String; value: string; }}
 	 */
@@ -52,8 +52,10 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
         valoresLocais = Response[0][1]
         restanteLocais = Response[1]
     })
-    let tamanhos = [22,20]
-    if(window.innerWidth<=600){
+    let tamanhos = [12,20]
+    if(window.innerWidth<=1200){
+      tamanhos=[16,20]
+    }else if(window.innerWidth<=992){
       tamanhos=[20,12]
     }
     $: options = {
@@ -73,9 +75,8 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
     type: 'category',
     data: nomesAgentes,
     inverse: true,
-    axisLabel : {
-      fontSize : tamanhos[1]
-    }
+    fontSize : tamanhos[1]
+    
   },
   xAxis: {
     type: 'value',
@@ -99,7 +100,7 @@ import {tratarDadosInteresse } from "./scripts/PuxarDados";
 
 $: optionEspaco = {
   title: {
-    text: 'Áreas de destaques dos locais',
+    text: 'Áreas de destaques dos Espaços',
     left: 'center',
     textStyle : {
       fontSize:tamanhos[0],
@@ -113,9 +114,7 @@ $: optionEspaco = {
     type: 'category',
     data: nomesLocais,
     inverse : true,
-    axisLabel : {
-      fontSize: tamanhos[1]
-    }
+    fontSize: tamanhos[1]
   },
   xAxis: {
     type: 'value',
@@ -141,10 +140,11 @@ let torelance = 12
 
 </script>
 <div class="descricao">
-  <h1>Perfil e vocação do Municipio</h1>
-  <p>A ferramenta levanta os dados de Aréas de atuação dos agentes e espaços cadastrados de modo a apresentar um mapa dos interesses de destaque da região</p>
+  <h1>Perfil e vocação do município</h1>
+  <p>Com os dados das áreas de atuação dos agentes e espaços cadastrados, destacamos os interesses do município.</p>
 </div>
 <div class="segurarAmbos">
+  {#if nomesAgentes.length>0}
     <div class="container">
       {#if restanteAgentes.length>0}
       <div class = "chartContainer">
@@ -167,6 +167,12 @@ let torelance = 12
       </div>
       {/if}
     </div>
+  {:else}
+    <div class="sem-resultado">
+      <p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
+    </div>
+  {/if}
+  {#if nomesLocais.length>0}
     <div class="container" id="segundo" >
       {#if restanteLocais.length > 0}
       <div class="chartContainer">
@@ -189,6 +195,11 @@ let torelance = 12
       </div>
       {/if}
     </div>
+    {:else}
+    <div class="sem-resultado">
+      <p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
+    </div>
+  {/if}
 </div>
 <style>
   .descricao{
@@ -214,11 +225,11 @@ let torelance = 12
     text-align: left;
     list-style-type: none;
   }
-  .reserva{
-    height: 100%;
-    width: 100%;
-  }
-  @media only screen and (max-width: 600px) {
+  
+  @media only screen and (max-width: 768px) {
+    .sem-resultado{
+      display: none;
+    }
     h2{
     text-align: center;
     font-size: 20px;
@@ -232,21 +243,78 @@ let torelance = 12
   ul {
     font-size: 18;
   }
+  
     .container {
+      padding-top: 5px;
         background-color: white;
         margin-left: 2.5%;
         margin-bottom: 5px;
         border-radius: 10px;
         width: 95%;
-        height: 800px;
+        height: auto;
+        padding-bottom: 10px;
     }
     .chartContainer {
-      height: 40%;
+      height: 320px;
       width: 100%;
+    }
+    .reserva{
+      width: 95%;
+      height: 400px;
     }
 	}
     
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width: 768px) {
+    h2{
+    text-align: center;
+    font-size: 20px;
+    margin: 0px;
+    padding-bottom: 10px;
+  }
+  li {
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+  }
+  ul {
+    font-size: 18;
+  }
+  .segurarAmbos{
+    display: flex;
+  }
+    .container {
+      padding-top: 5px;
+        background-color: white;
+        margin-left: 1%;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        width: 48%;
+        height: 770px;
+        padding-bottom: 10px;
+    }
+    .sem-resultado {
+      padding-top: 5px;
+        background-color: white;
+        margin-left: 1%;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        width: 48%;
+        height: 770px;
+        padding-bottom: 10px;
+    }
+    .sem-resultado p {
+      margin-top: 40vh;
+      font-size: 30px;
+      font-weight: bolder;
+    }
+    .chartContainer {
+      height: 320px;
+      width: 100%;
+    }
+    .reserva{
+      width: 95%;
+      height: 770px;
+    }
+  @media only screen and (min-width: 1200px){
     h2{
     text-align: center;
     font-size: 28px;
@@ -254,7 +322,10 @@ let torelance = 12
     padding-bottom: 10px;
   }
   
-  
+  .reserva{
+    height: 100%;
+    width: 100%;
+  }
   
   
   
@@ -263,25 +334,37 @@ let torelance = 12
       height: 100%;
       width: 40%;
     }
-    #segundo{
-        margin-left: 20px;
-    }
     .segurarAmbos{
         display: flex;
+        width: 98%;
+        margin-left: 15px;
+        margin-right: 15px;
+        justify-content: space-between;
+        
     }
     .container {
+      
         display: flex;
+        margin-left: 0px;
         justify-content: space-evenly;
         background-color: white;
-        margin-left: 20px;
         margin-bottom: 20px;
-        padding: 20px;
+        padding-left: 0px;
         padding-bottom: 0px;
         border-radius: 10px;
-        width: 800px;
+        width: 49.5%;
         height: 500px;
-        padding-left: 35px;
+    }
+    .sem-resultado {
+      height: 505px;
+      width: 49.5%;
+      padding: 0px;
+    }
+    .sem-resultado p {
+      margin-top: 20vh;
+      margin-left: 5px;
     }
 	}
+  }
   
 </style>

@@ -90,7 +90,7 @@ import { element } from "svelte/internal";
   <p>Aqui está a análise dos números brutos de agentes individuais e coletivos inscritos, também como o número de espaços cadastrados, tais dados quando acossiados a um municipio são apresentados no gráfico abaixo ordenados de maior número de agentes individuais para menor( dado mais número do mapas)</p>
 </div>
 
-<div class="organize">
+<div class="organize-info">
     <div class="info">
         <h1>número de agentes individuais</h1>
         <h3>{dadosTitulos[0]}</h3>
@@ -127,8 +127,8 @@ import { element } from "svelte/internal";
         font-size: 60px;
         font-weight: 200;
 }
-@media only screen and (max-width: 600px) {
-  .organize{
+@media only screen and (max-width: 768px) {
+  .organize-info{
         display: flex;
         flex-direction: column;
         margin: 5px;
@@ -155,37 +155,39 @@ import { element } from "svelte/internal";
 	}
 } 
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 768px) {
   .container {
+    align-self: center;
     padding: 0;
     margin-top: 5px;
-	  width: 1550px;
-	  height: 600px;
-    padding-top: 10px;
-    padding-left: 90px;
-    padding-right: 90px;
-    padding-bottom: 30px;
-    margin-left: 10px;
+	  width: 98%;
+	  height: 450px;
     background-color: white;
     border-radius: 15px;
     margin-bottom: 20px;
 
 	}
-  .organize{
-        display: flex;
-        flex-direction: row;
-        margin-left: 5px;
-        margin-right: 5px;
-        
-    }
-    
-    .info{
-        min-width: 550px;
+
+  .info{
+        width: 32%;
         background-color: white;
         padding: 10px;
-        margin: 15px 5px 5px 5px;
+        margin: 15px 1% 5px 1%;
         border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
+    .info h1 {
+        font-size: 30px;
+    }
+    
+    .organize-info{
+        display: flex;
+        flex-direction: row;
+        
+    }
+
     
 }
 

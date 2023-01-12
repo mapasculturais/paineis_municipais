@@ -112,8 +112,8 @@
 	
 	<div class="pesquisa">
 		<div class="descricao">
-			<h1>ferramenta de análise de dados municipais</h1>
-			<p>essa ferramanta foi desenvolvida visando a facilitação da visualização de dados referentes a participação de municipios dentro do mapas culturais</p>
+			<h1>Ferramenta de análise de dados culturais municipais</h1>
+			<p>Esta ferramenta facilita a visualização de dados da participação dos municípios dentro do <a href="https://mapacultural.secult.ce.gov.br/">Mapa Cultural do Ceará.</a></p>
 		</div>
 		<form autocomplete="off" on:submit|preventDefault={submitValue}>
 			<div class="autocomplete">
@@ -124,7 +124,7 @@
 					on:input={filtrarMunicipios}
 					on:click={event=>event.target.select()}>
 			</div>
-			<input type="submit">
+			<input type="submit" value="pesquisar">
 			{#if municipiosFiltrados.length>0}
 				<ul id="autocomplete-items-list">
 					{#each municipiosFiltrados as itemMuni,i}
@@ -137,7 +137,7 @@
 	{#if valorMuncipio==="ESTADO"}
 		<Estado/>
 	{:else if valorMuncipio===""}
-		<div class="loading">Aguardado Entrada Válida</div>
+		<div class="loading">Digite o nome do município</div>
 	{:else}
     	<Municipio municipio={valorMuncipio}/>
 	{/if}
@@ -177,62 +177,7 @@
 		text-align: center;
 	}
 
-
-
-@media only screen and (max-width: 600px) {
-	form input {
-		width: 95%;
-		align-self: center;
-	}
-	.container{
-		flex-direction: column;
-	}
-
-	div.autocomplete{
-		position: relative;
-		display: inline-block;
-		width: 90%;
-	}
-	#autocomplete-items-list {
-		z-index: 99;
-		position: absolute;
-		margin: 0;
-		margin-left: 10px;
-		margin-top: 10px;
-		padding: 0;
-		top: 45px;
-		width: 90%;
-		border: 1px solid #ddd;
-		background-color: #ddd;
-	}
-	
-
-} 
-
-@media only screen and (min-width: 600px) {
-	div.autocomplete{
-		position: relative;
-		display: inline-block;
-		width: 25%;
-	}
-	
-	input[type=submit]{
-		margin-left: 30px;
-	}
-	#autocomplete-items-list {
-		z-index: 99;
-		position: absolute;
-		margin: 0;
-		margin-left: 10px;
-		margin-top: 10px;
-		padding: 0;
-		top: 45px;
-		width: 26%;
-		border: 1px solid #ddd;
-		background-color: #ddd;
-	}	
-} 
-form {
+	form {
 	position: relative;
 }
 input {
@@ -247,9 +192,7 @@ input[type=text] {
 	background-color: #f1f1f1;
 	width: 100%;
 	}
-.container{
-		flex-direction: column;
-	}
+
 input[type=submit]{
 		
 		margin-top: 5px;
@@ -263,6 +206,93 @@ input[type=submit]{
 .container{
 	flex-direction: column;
 }
+
+@media only screen and (max-width: 768px) {
+	form input {
+		width: 95%;
+		align-self: center;
+	}
+	.container{
+		flex-direction: column;
+	}
+	div.autocomplete{
+		position: relative;
+		display: inline-block;
+		width: 90%;
+	}
+	#autocomplete-items-list {
+		z-index: 99;
+		position: absolute;
+		margin: 0;
+		margin-left: 10px;
+		margin-top: 10px;
+		padding: 0;
+		top: 45px;
+		width: 95%;
+		border: 1px solid #ddd;
+		background-color: #ddd;
+	}
+}
+@media only screen and (min-width: 768px) {
+	form input {
+		width: 48%;
+		align-self: center;
+	}
+	.container{
+		flex-direction: column;
+	}
+
+	div.autocomplete{
+		position: relative;
+		display: inline-block;
+		width: 48%;
+	}
+	#autocomplete-items-list {
+		z-index: 99;
+		position: absolute;
+		margin: 0;
+		margin-left: 1%;
+		margin-top: 10px;
+		padding: 0;
+		top: 45px;
+		width: 50%;
+		border: 1px solid #ddd;
+		background-color: #ddd;
+	}
+	
+
+} 
+
+
+
+@media only screen and (min-width: 1200px) {
+	div.autocomplete{
+		position: relative;
+		display: inline-block;
+		width: 576px;
+		margin-left: 10px;
+	}
+	form input {
+		width: 576px;
+		align-self: center;
+		margin-right: 0px;
+		margin-left: 0px;
+	}
+	
+	
+	#autocomplete-items-list {
+		z-index: 99;
+		position: absolute;
+		margin: 0;
+		margin-left: 10px;
+		margin-top: 10px;
+		padding: 0;
+		top: 45px;
+		width: 596px;
+		border: 1px solid #ddd;
+		background-color: #ddd;
+	}	
+} 
 
 
 </style>

@@ -31,7 +31,7 @@
 <div style="display: block;">
     <div class="descricao">
         <h1>Dimencionamento do campo cultural</h1>
-        <p>Segue abaixo a leitura dos dados brutos do Municipio, seu numero de Agentes Culturais registrados, tanto individuais como coletivos, também como o número de locais, é comparado a participação do municipio no mapas culturais a participação da sua macro região, e este dado é colocado lado a lado com a sua parcela da população da macro região, dados de PIB e população são utilizados para encontrar municipios semelhantes para que os dados sejam comparados</p>
+        <p>Abaixo você encontra os principais números do município: quantidade de Agentes Culturais registrados e espaços cadastrados; além de um comparativo com municípios com população e PIB semelhantes. No gráfico da esquerda é feito uma comparação entre a participação do município no Mapa Cultural do Ceará e a participação do município na sua macro região.</p>
     </div>
     <div class="organize">
         <div class="organize2">
@@ -45,19 +45,16 @@
                     <h3>{dadosMuni[1]}</h3>
                 </div>
                 <div class="info">
-                    <h1>número de locais</h1>
+                    <h1>número de espaços</h1>
                     <h3>{dadosMuni[2]}</h3>
                 </div>
             </div>
-            <div>
-                <Comparativo semelhantes = {semelhantes} municipio = {municipio} dadosMunicipio = {dadosMuni}></Comparativo>
-            </div>
+            <Comparativo semelhantes = {semelhantes} municipio = {municipio} dadosMunicipio = {dadosMuni}></Comparativo>
         </div>
         <div class="percentualESimilar">
             <Percentual {municipio}></Percentual>
-            <div class="organize">
                 <div class="similar">
-                    <h2>municipios semelhantes para comparação <span title="aproximação feita com tolerância de {+semelhantes[semelhantes.length-1]*100}%">*</span></h2>
+                    <h2>municípios semelhantes para comparação <span title="aproximação feita com tolerância de {+semelhantes[semelhantes.length-1]*100}%">*</span></h2>
                     <ul>
                         {#each semelhantes as individuais,i}
                             {#if (i<semelhantes.length-1)}
@@ -66,7 +63,6 @@
                         {/each}
                     </ul>
                 </div>
-            </div>
         </div>
         
     </div>
@@ -89,7 +85,7 @@
         font-weight: 200;
     }
     
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
     .info{
         width: 95%;
         background-color: white;
@@ -108,40 +104,114 @@
     }
 } 
 
-@media only screen and (min-width: 600px) {
+
+
+@media only screen and (min-width: 768px) {
     .info{
-        min-width: 350px;
+        width: 32%;
         background-color: white;
         padding: 10px;
-        margin: 15px 5px 5px 5px;
+        margin: 15px 1% 5px 1%;
         border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .info h1 {
+        font-size: 30px;
+    }
+    
+    .organize-info{
+        display: flex;
+    }
+    .percentualESimilar{
+        display: flex;
+    }
+
+    .similar {
+        width: 48%;
+        height: 250px;
+        align-items: center;
+        background-color: white;
+        border-radius: 15px;
+        margin-top: 5px;
+        margin-left: 1%;
+    }
+
+    .similar h2{
+        font-weight: 300;
+        text-align: center;
+        margin: 0px;
+        padding-top: 5px;
+        font-size: 30px;
+    }
+    .similar h2 span {
+        color: red;
+    }
+    .similar ul{
+        list-style-type: none;
+    }
+    .similar ul li{
+        font-size: 18px;
+        text-align: center;
+        padding-bottom: 8px;
+    }
+}
+
+@media only screen and (min-width: 1200px){
+    .info{
+        margin: 5px;
+        width: 32%;
+        background-color: white;
+        padding: 10px;
+        padding-top: 0px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        border-radius: 15px;
+        height: 105px;
+    }
+    .info h1{
+        font-size: 26px;
+    }
+    .info h3{
+        font-size: 50px;
     }
     .percentualESimilar{
         margin-left: 5px;
+        width: 25%;
+        height: 100%;
+        flex-direction: column;
     }
     .organize{
         display: flex;
         flex-direction: row;
         margin-left: 5px;
+        margin-right: 5px;
+        width: 98.5%;
+        height: 730px;
     }
     .organize-info{
         display: flex;
+        width: 100%;
         flex-direction: row;
-        margin-left: 5px;
+        justify-content: space-between;
     }
     
     .organize2 {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 75%;
+        height: 100%;
     }
     .similar {
-        min-width: 530px;
+        width: 100%;
+        height: 240px;
         align-items: center;
         background-color: white;
         border-radius: 15px;
         margin-top: 15px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         margin-left: 5px;
         margin-right: 5px;
     }
@@ -161,7 +231,7 @@
         text-align: center;
         padding-bottom: 5px;
     }
-
+    
 }
 </style>
 
