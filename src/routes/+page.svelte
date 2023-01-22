@@ -2,15 +2,13 @@
 // @ts-nocheck
 
 	import { acharporcentagens } from './sections/scripts/AcharPorcentagens';
-	import { numeroDadosMeso, numeroDadosMuni } from './sections/scripts/PuxarDados';
+	import {numeroDadosMeso, numeroDadosMuni } from './sections/scripts/PuxarDados';
 	import Pesquisa from './sections/Pesquisa.svelte';
 	import { MUNICIPIOS } from './sections/scripts/CONSTANTS/MUNICIPIOS';
 	import { afterUpdate, prevent_default } from 'svelte/internal';
 	import Estado from './sections/Estado.svelte';
 	import Municipio from './sections/Municipio.svelte';
-	
 
-	
 	//fazer autocomplete funcionar
 	/**
 	 * @type {string[]}

@@ -3,6 +3,8 @@
 
 	import { Chart } from "svelte-echarts";
 import { element } from "svelte/internal";
+	import AreaDeAtuacao from "./AreaDeAtuacao.svelte";
+	import Municipio from "./Municipio.svelte";
 	import { dadosBrutosEstado, todosDadosEstado } from "./scripts/PuxarDados";
 
     
@@ -108,7 +110,7 @@ import { element } from "svelte/internal";
 <div class="container">
   <Chart {options}/>
 </div>
-
+<AreaDeAtuacao municipio={'ESTADO'}/>
 
 
 

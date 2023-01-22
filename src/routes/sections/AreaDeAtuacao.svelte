@@ -169,7 +169,11 @@ let torelance = 12
     </div>
   {:else}
     <div class="sem-resultado">
+      {#if municipio == 'ESTADO'}
+        <p>calculando</p>
+      {:else}
       <p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
+      {/if}
     </div>
   {/if}
   {#if nomesLocais.length>0}
@@ -197,7 +201,11 @@ let torelance = 12
     </div>
     {:else}
     <div class="sem-resultado">
+      {#if municipio == 'ESTADO'}
+        <p>calculando</p>
+      {:else}
       <p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
+      {/if}
     </div>
   {/if}
 </div>
@@ -327,7 +335,10 @@ let torelance = 12
     width: 100%;
   }
   
-  
+  li {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
   
     .chartContainer {
       padding-top: 0.5%;

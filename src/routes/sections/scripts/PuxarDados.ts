@@ -1,4 +1,5 @@
 import axios from "axios"
+import { MESO } from "./CONSTANTS/MESO"
 import { MUNICIPIOS } from "./CONSTANTS/MUNICIPIOS"
 
 
@@ -37,13 +38,25 @@ async function numeroDadosMuni(lugar : string){
     return final
 }
 
-async function interessesMuni(municipio:string, tipo : string) {
-    const p1 = axios.get('https://mapacultural.secult.ce.gov.br/api/'+tipo+'/find', {params:{
-        '@select' : 'terms',
-        'geoMunicipio' : 'EQ('+municipio+')'
-    }})
+async function interessesMuni(municipio:string, tipo : string, mapaGeral?:Map <string,number>) {
+    let p1
+    if(mapaGeral===undefined){
+        p1 = axios.get('https://mapacultural.secult.ce.gov.br/api/'+tipo+'/find', {params:{
+            '@select' : 'terms',
+            'geoMunicipio' : 'EQ('+municipio+')'
+        }})
+    }else{
+        p1 = axios.get('https://mapacultural.secult.ce.gov.br/api/'+tipo+'/find', {params:{
+            '@select' : 'terms',
+            'geoMesorregiao' : 'EQ('+municipio+')'
+        }})
+    }
+    
     const dados = await p1
-    const mapaInteresses = new Map <string,number>() 
+    let mapaInteresses = new Map <string,number>() 
+    if(mapaGeral!==undefined){
+        mapaInteresses = mapaGeral
+    }
     const total = dados.data.length
     dados.data.forEach((dado: any) =>{
         const atual = dado.terms.area
@@ -62,12 +75,22 @@ async function interessesMuni(municipio:string, tipo : string) {
 async function tratarDadosInteresse(lugar :string, tipo: string) {
     let mapa = new Map <string,number>()
     let total : number
-    if(lugar!=="ESTADO"){
+    if(MUNICIPIOS.has(lugar)){
         const resultado = await interessesMuni(lugar,tipo)
         mapa = resultado[0]
         total = resultado[1]
-    }else{
+    }else if (lugar=="ESTADO"){
+        total = 0
         //depois tenho que ver como vou fazer o request pra estado, os testes estão dando errado
+        const mesos = new Set<string>()
+        for(const [key, value] of MESO){
+            mesos.add(value)
+        }
+        for(const meso of mesos){
+            const resultado = await interessesMuni(meso,tipo,mapa)
+            mapa = resultado[0]
+            total = total + resultado[1]
+        }
     }
     const dados = Array.from(mapa, ([name, value]) => ({ name, value}));
     dados.sort((a,b)=>b.value-a.value)
