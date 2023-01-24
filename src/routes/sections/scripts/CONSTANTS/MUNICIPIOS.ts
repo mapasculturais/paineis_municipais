@@ -1,4 +1,4 @@
-const MUNICIPIOS = new Set<string>()
+const MUNICIPIOS = new Set<string>();
 
 MUNICIPIOS.add('BELA CRUZ');
 MUNICIPIOS.add('CANINDÉ');
@@ -185,4 +185,4 @@ MUNICIPIOS.add('QUIXERAMOBIM');
 MUNICIPIOS.add('MORADA NOVA');
 MUNICIPIOS.add('PARAMBU');
 
-export {MUNICIPIOS}
+export { MUNICIPIOS };
