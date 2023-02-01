@@ -307,6 +307,7 @@ async function compararAtuacaoMeso(muni: string, tipo: string, nomesAreas: strin
 }
 
 export {
+	areaDeAtuacao,
 	compararAtuacaoMeso,
 	tratarDadosAtuacao as tratarDadosInteresse,
 	areaDeAtuacao as interessesMuni,

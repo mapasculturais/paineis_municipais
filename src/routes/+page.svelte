@@ -12,6 +12,8 @@
 	 */
 	let municipiosFiltrados = [];
 
+
+
 	//filtra municipios e bota em negrito o q tem em comum
 	const filtrarMunicipios = () => {
 		/**
