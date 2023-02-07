@@ -8,6 +8,8 @@ let MAPAESTADO = {
     espaco: new Map()
 }
 
+let atualizado = false
+
 function totalParaPeso(pesos : number[]) {
     const soma = pesos.reduce((acc, value) => acc + value, 0);
     const final = pesos.map(value => value / soma);
@@ -17,7 +19,7 @@ function totalParaPeso(pesos : number[]) {
   
 
   //CORRIGIR, tem algo errado
-  function juntaMapas(mapas: any[] | Map<any, any>, pesos: any[]) {
+  function juntaMapas(mapas: any[] | Map<any, any>, pesosAgente: any[],pesosEspaco: any[]) {
     const resultadoAgente = new Map();
     const resultadoEspaco = new Map();
   
@@ -25,17 +27,17 @@ function totalParaPeso(pesos : number[]) {
     for (const [key, value] of mapas.entries()) {
       for (const [mapKey, mapValue] of value.agente.entries()) {
         if (resultadoAgente.has(mapKey)) {
-          resultadoAgente.set(mapKey, resultadoAgente.get(mapKey) + mapValue * pesos[index]);
+          resultadoAgente.set(mapKey, resultadoAgente.get(mapKey) + mapValue * pesosAgente[index]);
         } else {
-          resultadoAgente.set(mapKey, mapValue * pesos[index]);
+          resultadoAgente.set(mapKey, mapValue * pesosAgente[index]);
         }
       }
   
       for (const [mapKey, mapValue] of value.espaco.entries()) {
         if (resultadoEspaco.has(mapKey)) {
-          resultadoEspaco.set(mapKey, resultadoEspaco.get(mapKey) + mapValue * pesos[index]);
+          resultadoEspaco.set(mapKey, resultadoEspaco.get(mapKey) + mapValue * pesosEspaco[index]);
         } else {
-          resultadoEspaco.set(mapKey, mapValue * pesos[index]);
+          resultadoEspaco.set(mapKey, mapValue * pesosEspaco[index]);
         }
       }
   
@@ -43,37 +45,45 @@ function totalParaPeso(pesos : number[]) {
     }
   
     for (const [key, value] of resultadoAgente.entries()) {
-      resultadoAgente.set(key, value / pesos.reduce((a, b) => a + b, 0));
+      resultadoAgente.set(key, value / pesosAgente.reduce((a, b) => a + b, 0));
     }
   
     for (const [key, value] of resultadoEspaco.entries()) {
-      resultadoEspaco.set(key, value / pesos.reduce((a, b) => a + b, 0));
+      resultadoEspaco.set(key, value / pesosEspaco.reduce((a, b) => a + b, 0));
     }
   
     return { agente: resultadoAgente, espaco: resultadoEspaco };
   }
 
 async function atualizarMapasAtuacao() {
-		const mesos = new Set<string>(Array.from(MESO.values()));
-        let total =  Array(mesos.size).fill(0)
+  if(!atualizado){
+    const mesos = new Set<string>(Array.from(MESO.values()));
+    console.log(mesos)
+        let totalAg =  Array(mesos.size).fill(0)
+        let totalEs = Array(mesos.size).fill(0)
         let atual = 0
 		for (const meso of mesos) {
             const tipos = ['agent', 'space']
-            const mapa = new Map()
             const mapaAgente = new Map()
             const mapaEspaco = new Map()
-                for(const tipo of tipos){
+            for(const tipo of tipos){
+              const mapa = new Map()
 			        const resultado = await areaDeAtuacao(meso, tipo, mapa);
 			        const mapaAtual = resultado[0];
-			        total[atual] = resultado[1];
+              if(tipo == "agent"){
+                totalAg[atual] = resultado[1];
+              }else if(tipo == "space"){
+                totalEs[atual] = resultado[1];
+              }
+			        
                     const dados = Array.from(mapaAtual, ([name, value]) => ({ name, value }));
 	                dados.sort((a, b) => b.value - a.value);
                     dados.forEach((dado)=>{
                         if(dado.name!=='Outros'){
                             if(tipo == "agent"){
-                                mapaAgente.set(dado.name,(dado.value*100)/total[atual])
+                                mapaAgente.set(dado.name,(dado.value*100)/totalAg[atual])
                             }else if(tipo == "space"){
-                                mapaEspaco.set(dado.name,(dado.value*100)/total[atual])
+                                mapaEspaco.set(dado.name,(dado.value*100)/totalEs[atual])
                             }
                             
                         }
@@ -86,8 +96,13 @@ async function atualizarMapasAtuacao() {
             MAPAMESOS.set(meso,objeto)
             atual++
         }
-        total = totalParaPeso(total)
-        MAPAESTADO = juntaMapas(MAPAMESOS,total)
+        console.log(MAPAMESOS)
+        totalAg = totalParaPeso(totalAg)
+        totalEs = totalParaPeso(totalEs)
+        MAPAESTADO = juntaMapas(MAPAMESOS,totalAg,totalEs)
+        atualizado=true
+  }
+		
     }
 
     export {

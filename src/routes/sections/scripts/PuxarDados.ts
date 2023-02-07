@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { atualizarMapasAtuacao, MAPAESTADO, MAPAMESOS } from './CONSTANTS/ATUACAO';
 import { MESO } from './CONSTANTS/MESO';
 import { MICRO } from './CONSTANTS/MICRO';
 import { MUNICIPIOS } from './CONSTANTS/MUNICIPIOS';
@@ -65,7 +66,7 @@ async function areaDeAtuacao(local: string, tipo: string, mapaGeral?: Map<string
 		const atual = dado.terms.area;
 		atual.forEach((interesseAtual: string) => {
 			let valor: number;
-			if (mapaInteresses.get(interesseAtual) !== undefined) {
+			if (mapaInteresses.has(interesseAtual)) {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				valor = mapaInteresses.get(interesseAtual)!;
 				mapaInteresses.set(interesseAtual, valor + 1);
@@ -79,6 +80,7 @@ async function areaDeAtuacao(local: string, tipo: string, mapaGeral?: Map<string
 
 //recebe um municipio ou 'ESTADO', dependendo do caso utiliza a função de área de atuação pra tratar o mapa de áreas de atuação do local e retorna um array de destaques, um array com os valores percentuais dos destaques e um array de objetos com as áreas restantes
 async function tratarDadosAtuacao(lugar: string, tipo: string) {
+	await atualizarMapasAtuacao()
 	let mapa = new Map<string, number>();
 	let total: number;
 	if (MUNICIPIOS.has(lugar)) {
@@ -86,13 +88,12 @@ async function tratarDadosAtuacao(lugar: string, tipo: string) {
 		mapa = resultado[0];
 		total = resultado[1];
 	} else if (lugar == 'ESTADO') {
-		total = 0;
+		total = 100;
 		//depois tenho que ver como vou fazer o request pra estado, os testes estão dando errado
-		const mesos = new Set<string>(Array.from(MESO.values()));
-		for (const meso of mesos) {
-			const resultado = await areaDeAtuacao(meso, tipo, mapa);
-			mapa = resultado[0];
-			total = total + resultado[1];
+		if(tipo=="agent"){
+			mapa = MAPAESTADO.agente
+		}else if(tipo =="space"){
+			mapa = MAPAESTADO.espaco
 		}
 	}
 	const dados = Array.from(mapa, ([name, value]) => ({ name, value }));
@@ -117,8 +118,54 @@ async function tratarDadosAtuacao(lugar: string, tipo: string) {
 			outros.push(individual);
 		}
 	});
-
-	return [[destaquesNomes, destaquesValores], outros];
+	if(MUNICIPIOS.has(lugar)){
+		const destaquesMeso: any[] = []
+		const destaquesEstado: any[] = []
+		destaquesNomes.forEach(destaque => {
+			if(tipo=="agent"){
+				destaquesMeso.push(MAPAMESOS.get(MESO.get(MICRO.get(lugar))).agente.get(destaque).toFixed(2))
+				destaquesEstado.push(MAPAESTADO.agente.get(destaque).toFixed(2))
+			}else if(tipo == "space"){
+				destaquesMeso.push(MAPAMESOS.get(MESO.get(MICRO.get(lugar))).agente.get(destaque).toFixed(2))
+				destaquesEstado.push(MAPAESTADO.espaco.get(destaque).toFixed(2))
+			}
+		});
+		const series = [
+			{
+				name: lugar,
+				data: [
+					...destaquesValores
+				],
+				type: 'bar'
+			},
+			{
+				name: MESO.get(MICRO.get(lugar)),
+				data: [
+					...destaquesMeso
+				],
+				type: 'bar'
+			},
+			{
+				name: 'ESTADO',
+				data: [
+					...destaquesEstado
+				],
+				type: 'bar'
+			}
+		]
+			return [[destaquesNomes,series],outros]
+		}else{
+			const series = [
+				{
+					name: lugar,
+					data: [
+						...destaquesValores
+					],
+					type: 'bar'
+				}
+			]
+			return [[destaquesNomes,series],outros]
+		}
 }
 
 //retorna o número bruto de agentes individuais, coletivos e espaços cadastrados no estado

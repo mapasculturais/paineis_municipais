@@ -33,8 +33,7 @@
 	 * @type {string | any[]}
 	 */
 	let restanteLocais = [];
-	let valoresAgentesMeso;
-	let valoresLocaisMeso;
+	let verificar = (municipio != 'ESTADO')
 	$: tratarDadosInteresse(municipio, 'agent')
 		.then((Response) => {
 			// @ts-ignore
@@ -43,11 +42,6 @@
 			valoresAgentes = Response[0][1];
 			restanteAgentes = Response[1];
 		})
-		.then(() => {
-			compararAtuacaoMeso(municipio, 'agent', nomesAgentes).then((Response) => {
-				valoresAgentesMeso = Response;
-			});
-		});
 	$: tratarDadosInteresse(municipio, 'space')
 		.then((Response) => {
 			// @ts-ignore
@@ -56,11 +50,6 @@
 			valoresLocais = Response[0][1];
 			restanteLocais = Response[1];
 		})
-		.then(() => {
-			compararAtuacaoMeso(municipio, 'space', nomesAgentes).then((Response) => {
-				valoresLocaisMeso = Response;
-			});
-		});
 	let tamanhos = [12, 20];
 	if (window.innerWidth <= 1200) {
 		tamanhos = [16, 20];
@@ -79,6 +68,13 @@
 		tooltip: {
 			trigger: 'item'
 		},
+		legend: {
+			show: verificar,
+			top: '30px',
+			textStyle: {
+				fontSize: tamanhos[2]
+			}
+		},
 		yAxis: {
 			type: 'category',
 			data: nomesAgentes,
@@ -94,16 +90,7 @@
 				show: false
 			}
 		},
-		series: [
-			{
-				data: valoresAgentes,
-				type: 'bar'
-			},
-			{
-				data: valoresAgentesMeso,
-				type: 'bar'
-			}
-		],
+		series: valoresAgentes,
 		grid: {
 			containLabel: true
 		}
@@ -121,6 +108,13 @@
 		tooltip: {
 			trigger: 'item'
 		},
+		legend: {
+			show: verificar,
+			top: '30px',
+			textStyle: {
+				fontSize: tamanhos[2]
+			}
+		},
 		yAxis: {
 			type: 'category',
 			data: nomesLocais,
@@ -136,16 +130,7 @@
 				show: false
 			}
 		},
-		series: [
-			{
-				data: valoresLocais,
-				type: 'bar'
-			},
-			{
-				data: valoresLocaisMeso,
-				type: 'bar'
-			}
-		],
+		series: valoresLocais,
 		grid: {
 			containLabel: true
 		}
@@ -157,7 +142,7 @@
 	<h1>Perfil e vocação do município</h1>
 	<p>
 		Com os dados das áreas de atuação dos agentes e espaços cadastrados, destacamos os interesses do
-		município.
+		município, é possível também comparar os valores com os da região e com os do estado.
 	</p>
 </div>
 <div class="segurarAmbos">
