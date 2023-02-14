@@ -62,7 +62,7 @@ $: options = {
             <div class="chartContainer">
                 <Chart {options}/>
             </div>
-            <p>o municipio {municipio} possue {dados.agentesOuro} agentes classificados como ouro, {dados.agentesPrata} agentes classificados como prata e {dados.agentesBronze} agentes classificados como bronze</p>
+            <p>o municipio {municipio} possui {dados.agentesOuro} agentes classificados como ouro, {dados.agentesPrata} agentes classificados como prata e {dados.agentesBronze} agentes classificados como bronze</p>
         {:else}
             <p>Calculando</p>
         {/if}
