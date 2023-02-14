@@ -2,8 +2,9 @@
 	import Comparativo from './Comparativo.svelte';
 	import Percentual from './Percentual.svelte';
 	import { acharSemelhantes } from './scripts/AcharSemelhantes';
-	import { numeroDadosMuni } from './scripts/PuxarDados';
+	import { avaliarAgentesMuni, numeroDadosMuni } from './scripts/PuxarDados';
 	import AreaDeAtuacao from './AreaDeAtuacao.svelte';
+	import AvaliacaoAgentes from './AvaliacaoAgentes.svelte';
 	/**
 	 * @type {string}
 	 */
@@ -17,6 +18,7 @@
 	 * @type {number[]}
 	 */
 	let dadosMuni = [];
+	$: avaliarAgentesMuni(municipio)
 	$: numeroDadosMuni(municipio).then((response) => {
 		dadosMuni = response;
 	});
@@ -73,6 +75,7 @@
 	</div>
 </div>
 <AreaDeAtuacao {municipio} />
+<AvaliacaoAgentes {municipio}/>
 
 <style>
 	.descricao {

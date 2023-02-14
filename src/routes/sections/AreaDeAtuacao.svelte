@@ -2,7 +2,7 @@
 	// @ts-nocheck
 
 	import { Chart } from 'svelte-echarts';
-	import { compararAtuacaoMeso, tratarDadosInteresse } from './scripts/PuxarDados';
+	import { tratarDadosInteresse } from './scripts/PuxarDados';
 	/**
 	 * @type {string}
 	 */

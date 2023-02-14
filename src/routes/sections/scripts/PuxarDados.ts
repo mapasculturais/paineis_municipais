@@ -352,7 +352,80 @@ async function compararAtuacaoMeso(muni: string, tipo: string, nomesAreas: strin
 	}
 	return final;
 }
-
+async function avaliarAgentesMuni(municipio :string) {
+	const retorno = {
+		agentesBronze : 0,
+		agentesPrata : 0,
+		agentesOuro: 0
+	}
+	const dados = await axios.get('https://mapacultural.secult.ce.gov.br/api/agent/find', {
+		params: {
+			'@select': 'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,useOpportunityTab',
+			geoMunicipio: 'EQ(' + municipio + ')'
+		}
+	})
+	const mediapequeno = {
+		total : 0,
+		atual: 0
+	}
+	const mediaGrande = {
+		total : 0,
+		atual: 0
+	}
+	dados.data.forEach((agente: { shortDescription: string | undefined; longDescription: string | undefined; emailPublico: undefined; endereco: undefined; site: undefined; facebook: undefined; twitter: undefined; instagram: undefined; linkedin: undefined; spotify: undefined; youtube: undefined; pinterest: undefined; useOpportunityTab: undefined; }) => {
+		let valor = 0
+		if(agente.shortDescription!==undefined){
+			valor+= parseInt((agente.shortDescription.length/200).toFixed(0))
+			mediapequeno.total+=agente.shortDescription.length
+			mediapequeno.atual++
+		}
+		if(agente.longDescription!==undefined){
+			valor+= parseInt((agente.longDescription.length/350).toFixed(0))
+			mediaGrande.total+=agente.longDescription.length
+			mediaGrande.atual++
+		}
+		if(agente.emailPublico!==undefined){
+			valor+= 5
+		}
+		if(agente.endereco!==undefined){
+			valor+=2
+		}
+		if(agente.site !== undefined){
+			valor+=10
+		}
+		if(agente.facebook!==undefined){
+			valor+=1
+		}
+		if(agente.facebook!==undefined){
+			valor+=1
+		}
+		if(agente.twitter!==undefined){
+			valor+=1
+		}if(agente.instagram!==undefined){
+			valor+=1
+		}if(agente.linkedin!==undefined){
+			valor+=1
+		}if(agente.spotify!==undefined){
+			valor+=1
+		}if(agente.youtube!==undefined){
+			valor+=1
+		}if(agente.pinterest!==undefined){
+			valor+=1
+		}if(agente.useOpportunityTab!==undefined){
+			valor+=20
+		}
+		if(valor>50){
+			retorno.agentesOuro+=1
+		}else if(valor>45){
+			retorno.agentesPrata+=1
+		}else{
+			retorno.agentesBronze+=1
+		}
+	});
+	console.log("media pequeno + "+(mediapequeno.total/mediapequeno.atual))
+	console.log("media grande + "+(mediaGrande.total/mediaGrande.atual))
+	return retorno
+}
 export {
 	areaDeAtuacao,
 	compararAtuacaoMeso,
@@ -363,5 +436,6 @@ export {
 	numerosSemelhantes,
 	numerosDadosEstado,
 	dadosBrutosEstado,
-	todosDadosEstado
+	todosDadosEstado,
+	avaliarAgentesMuni
 };
