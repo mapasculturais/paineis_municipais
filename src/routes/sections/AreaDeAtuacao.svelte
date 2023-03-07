@@ -33,23 +33,21 @@
 	 * @type {string | any[]}
 	 */
 	let restanteLocais = [];
-	let verificar = (municipio != 'ESTADO')
-	$: tratarDadosInteresse(municipio, 'agent')
-		.then((Response) => {
-			// @ts-ignore
-			nomesAgentes = Response[0][0];
-			// @ts-ignore
-			valoresAgentes = Response[0][1];
-			restanteAgentes = Response[1];
-		})
-	$: tratarDadosInteresse(municipio, 'space')
-		.then((Response) => {
-			// @ts-ignore
-			nomesLocais = Response[0][0];
-			// @ts-ignore
-			valoresLocais = Response[0][1];
-			restanteLocais = Response[1];
-		})
+	let verificar = municipio != 'ESTADO';
+	$: tratarDadosInteresse(municipio, 'agent').then((Response) => {
+		// @ts-ignore
+		nomesAgentes = Response[0][0];
+		// @ts-ignore
+		valoresAgentes = Response[0][1];
+		restanteAgentes = Response[1];
+	});
+	$: tratarDadosInteresse(municipio, 'space').then((Response) => {
+		// @ts-ignore
+		nomesLocais = Response[0][0];
+		// @ts-ignore
+		valoresLocais = Response[0][1];
+		restanteLocais = Response[1];
+	});
 	let tamanhos = [12, 20];
 	if (window.innerWidth <= 1200) {
 		tamanhos = [16, 20];

@@ -80,7 +80,7 @@ async function areaDeAtuacao(local: string, tipo: string, mapaGeral?: Map<string
 
 //recebe um municipio ou 'ESTADO', dependendo do caso utiliza a função de área de atuação pra tratar o mapa de áreas de atuação do local e retorna um array de destaques, um array com os valores percentuais dos destaques e um array de objetos com as áreas restantes
 async function tratarDadosAtuacao(lugar: string, tipo: string) {
-	await atualizarMapasAtuacao()
+	await atualizarMapasAtuacao();
 	let mapa = new Map<string, number>();
 	let total: number;
 	if (MUNICIPIOS.has(lugar)) {
@@ -90,10 +90,10 @@ async function tratarDadosAtuacao(lugar: string, tipo: string) {
 	} else if (lugar == 'ESTADO') {
 		total = 100;
 		//depois tenho que ver como vou fazer o request pra estado, os testes estão dando errado
-		if(tipo=="agent"){
-			mapa = MAPAESTADO.agente
-		}else if(tipo =="space"){
-			mapa = MAPAESTADO.espaco
+		if (tipo == 'agent') {
+			mapa = MAPAESTADO.agente;
+		} else if (tipo == 'space') {
+			mapa = MAPAESTADO.espaco;
 		}
 	}
 	const dados = Array.from(mapa, ([name, value]) => ({ name, value }));
@@ -118,54 +118,54 @@ async function tratarDadosAtuacao(lugar: string, tipo: string) {
 			outros.push(individual);
 		}
 	});
-	if(MUNICIPIOS.has(lugar)){
-		const destaquesMeso: any[] = []
-		const destaquesEstado: any[] = []
-		destaquesNomes.forEach(destaque => {
-			if(tipo=="agent"){
-				destaquesMeso.push(MAPAMESOS.get(MESO.get(MICRO.get(lugar))).agente.get(destaque).toFixed(2))
-				destaquesEstado.push(MAPAESTADO.agente.get(destaque).toFixed(2))
-			}else if(tipo == "space"){
-				destaquesMeso.push(MAPAMESOS.get(MESO.get(MICRO.get(lugar))).agente.get(destaque).toFixed(2))
-				destaquesEstado.push(MAPAESTADO.espaco.get(destaque).toFixed(2))
+	if (MUNICIPIOS.has(lugar)) {
+		const destaquesMeso: any[] = [];
+		const destaquesEstado: any[] = [];
+		destaquesNomes.forEach((destaque) => {
+			if (tipo == 'agent') {
+				destaquesMeso.push(
+					MAPAMESOS.get(MESO.get(MICRO.get(lugar)))
+						.agente.get(destaque)
+						.toFixed(2)
+				);
+				destaquesEstado.push(MAPAESTADO.agente.get(destaque).toFixed(2));
+			} else if (tipo == 'space') {
+				destaquesMeso.push(
+					MAPAMESOS.get(MESO.get(MICRO.get(lugar)))
+						.agente.get(destaque)
+						.toFixed(2)
+				);
+				destaquesEstado.push(MAPAESTADO.espaco.get(destaque).toFixed(2));
 			}
 		});
 		const series = [
 			{
 				name: lugar,
-				data: [
-					...destaquesValores
-				],
+				data: [...destaquesValores],
 				type: 'bar'
 			},
 			{
 				name: MESO.get(MICRO.get(lugar)),
-				data: [
-					...destaquesMeso
-				],
+				data: [...destaquesMeso],
 				type: 'bar'
 			},
 			{
 				name: 'ESTADO',
-				data: [
-					...destaquesEstado
-				],
+				data: [...destaquesEstado],
 				type: 'bar'
 			}
-		]
-			return [[destaquesNomes,series],outros]
-		}else{
-			const series = [
-				{
-					name: lugar,
-					data: [
-						...destaquesValores
-					],
-					type: 'bar'
-				}
-			]
-			return [[destaquesNomes,series],outros]
-		}
+		];
+		return [[destaquesNomes, series], outros];
+	} else {
+		const series = [
+			{
+				name: lugar,
+				data: [...destaquesValores],
+				type: 'bar'
+			}
+		];
+		return [[destaquesNomes, series], outros];
+	}
 }
 
 //retorna o número bruto de agentes individuais, coletivos e espaços cadastrados no estado
@@ -352,79 +352,102 @@ async function compararAtuacaoMeso(muni: string, tipo: string, nomesAreas: strin
 	}
 	return final;
 }
-async function avaliarAgentesMuni(municipio :string) {
+async function avaliarAgentesMuni(municipio: string) {
 	const retorno = {
-		agentesBronze : 0,
-		agentesPrata : 0,
+		agentesBronze: 0,
+		agentesPrata: 0,
 		agentesOuro: 0
-	}
+	};
 	const dados = await axios.get('https://mapacultural.secult.ce.gov.br/api/agent/find', {
 		params: {
-			'@select': 'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,useOpportunityTab',
+			'@select':
+				'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,useOpportunityTab',
 			geoMunicipio: 'EQ(' + municipio + ')'
 		}
-	})
-	const mediapequeno = {
-		total : 0,
-		atual: 0
-	}
-	const mediaGrande = {
-		total : 0,
-		atual: 0
-	}
-	dados.data.forEach((agente: { shortDescription: string | undefined; longDescription: string | undefined; emailPublico: undefined; endereco: undefined; site: undefined; facebook: undefined; twitter: undefined; instagram: undefined; linkedin: undefined; spotify: undefined; youtube: undefined; pinterest: undefined; useOpportunityTab: undefined; }) => {
-		let valor = 0
-		if(agente.shortDescription!==undefined){
-			valor+= parseInt((agente.shortDescription.length/200).toFixed(0))
-			mediapequeno.total+=agente.shortDescription.length
-			mediapequeno.atual++
-		}
-		if(agente.longDescription!==undefined){
-			valor+= parseInt((agente.longDescription.length/350).toFixed(0))
-			mediaGrande.total+=agente.longDescription.length
-			mediaGrande.atual++
-		}
-		if(agente.emailPublico!==undefined){
-			valor+= 5
-		}
-		if(agente.endereco!==undefined){
-			valor+=2
-		}
-		if(agente.site !== undefined){
-			valor+=10
-		}
-		if(agente.facebook!==undefined){
-			valor+=1
-		}
-		if(agente.facebook!==undefined){
-			valor+=1
-		}
-		if(agente.twitter!==undefined){
-			valor+=1
-		}if(agente.instagram!==undefined){
-			valor+=1
-		}if(agente.linkedin!==undefined){
-			valor+=1
-		}if(agente.spotify!==undefined){
-			valor+=1
-		}if(agente.youtube!==undefined){
-			valor+=1
-		}if(agente.pinterest!==undefined){
-			valor+=1
-		}if(agente.useOpportunityTab!==undefined){
-			valor+=20
-		}
-		if(valor>50){
-			retorno.agentesOuro+=1
-		}else if(valor>45){
-			retorno.agentesPrata+=1
-		}else{
-			retorno.agentesBronze+=1
-		}
 	});
-	console.log("media pequeno + "+(mediapequeno.total/mediapequeno.atual))
-	console.log("media grande + "+(mediaGrande.total/mediaGrande.atual))
-	return retorno
+	const mediapequeno = {
+		total: 0,
+		atual: 0
+	};
+	const mediaGrande = {
+		total: 0,
+		atual: 0
+	};
+	dados.data.forEach(
+		(agente: {
+			shortDescription: string | undefined;
+			longDescription: string | undefined;
+			emailPublico: undefined;
+			endereco: undefined;
+			site: undefined;
+			facebook: undefined;
+			twitter: undefined;
+			instagram: undefined;
+			linkedin: undefined;
+			spotify: undefined;
+			youtube: undefined;
+			pinterest: undefined;
+			useOpportunityTab: undefined;
+		}) => {
+			let valor = 0;
+			if (agente.shortDescription !== undefined) {
+				valor += parseInt((agente.shortDescription.length / 200).toFixed(0));
+				mediapequeno.total += agente.shortDescription.length;
+				mediapequeno.atual++;
+			}
+			if (agente.longDescription !== undefined) {
+				valor += parseInt((agente.longDescription.length / 350).toFixed(0));
+				mediaGrande.total += agente.longDescription.length;
+				mediaGrande.atual++;
+			}
+			if (agente.emailPublico !== undefined) {
+				valor += 5;
+			}
+			if (agente.endereco !== undefined) {
+				valor += 2;
+			}
+			if (agente.site !== undefined) {
+				valor += 10;
+			}
+			if (agente.facebook !== undefined) {
+				valor += 1;
+			}
+			if (agente.facebook !== undefined) {
+				valor += 1;
+			}
+			if (agente.twitter !== undefined) {
+				valor += 1;
+			}
+			if (agente.instagram !== undefined) {
+				valor += 1;
+			}
+			if (agente.linkedin !== undefined) {
+				valor += 1;
+			}
+			if (agente.spotify !== undefined) {
+				valor += 1;
+			}
+			if (agente.youtube !== undefined) {
+				valor += 1;
+			}
+			if (agente.pinterest !== undefined) {
+				valor += 1;
+			}
+			if (agente.useOpportunityTab !== undefined) {
+				valor += 20;
+			}
+			if (valor > 50) {
+				retorno.agentesOuro += 1;
+			} else if (valor > 45) {
+				retorno.agentesPrata += 1;
+			} else {
+				retorno.agentesBronze += 1;
+			}
+		}
+	);
+	console.log('media pequeno + ' + mediapequeno.total / mediapequeno.atual);
+	console.log('media grande + ' + mediaGrande.total / mediaGrande.atual);
+	return retorno;
 }
 export {
 	areaDeAtuacao,

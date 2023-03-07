@@ -18,7 +18,7 @@
 	 * @type {number[]}
 	 */
 	let dadosMuni = [];
-	$: avaliarAgentesMuni(municipio)
+	$: avaliarAgentesMuni(municipio);
 	$: numeroDadosMuni(municipio).then((response) => {
 		dadosMuni = response;
 	});
@@ -75,7 +75,7 @@
 	</div>
 </div>
 <AreaDeAtuacao {municipio} />
-<AvaliacaoAgentes {municipio}/>
+<AvaliacaoAgentes {municipio} />
 
 <style>
 	.descricao {
