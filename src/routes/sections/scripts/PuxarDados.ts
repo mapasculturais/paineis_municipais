@@ -362,6 +362,7 @@ async function avaliarAgentesMuni(municipio: string) {
 		params: {
 			'@select':
 				'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,useOpportunityTab',
+			'@files' : '(downloads,gallery):url',
 			geoMunicipio: 'EQ(' + municipio + ')'
 		}
 	});
@@ -374,71 +375,75 @@ async function avaliarAgentesMuni(municipio: string) {
 		atual: 0
 	};
 	dados.data.forEach(
-		(agente: {
-			shortDescription: string | undefined;
-			longDescription: string | undefined;
-			emailPublico: undefined;
-			endereco: undefined;
-			site: undefined;
-			facebook: undefined;
-			twitter: undefined;
-			instagram: undefined;
-			linkedin: undefined;
-			spotify: undefined;
-			youtube: undefined;
-			pinterest: undefined;
-			useOpportunityTab: undefined;
-		}) => {
+		(agente: { [x: string]: string | any[]; shortDescription: string | any[] | undefined; longDescription: string | any[] | undefined; emailPublico: undefined; site: undefined; facebook: undefined; twitter: undefined; instagram: undefined; linkedin: undefined; spotify: undefined; youtube: undefined; pinterest: undefined; useOpportunityTab: undefined; }) => {
+			//trocar analise para grupos, descrição, ponto de contato(redes sociais, etc), presença de mídias externas, data da ultima atualização de perfil
+			//apresentar estes dados individualmente em grupos, e analisar conjunto
 			let valor = 0;
+			let validador = 0;
+
+
+			if(agente["@files:downloads"]!=undefined){
+				validador+=agente["@files:downloads"].length
+			}
+			if(agente["@files:gallery"]!=undefined){
+				validador+=agente["@files:gallery"].length
+			}
+			if(validador>=3){
+				valor+=1
+			}
+			validador = 0
+
 			if (agente.shortDescription !== undefined) {
-				valor += parseInt((agente.shortDescription.length / 200).toFixed(0));
+				validador += parseInt((agente.shortDescription.length / 200).toFixed(0));
 				mediapequeno.total += agente.shortDescription.length;
 				mediapequeno.atual++;
 			}
 			if (agente.longDescription !== undefined) {
-				valor += parseInt((agente.longDescription.length / 350).toFixed(0));
+				validador += parseInt((agente.longDescription.length / 350).toFixed(0));
 				mediaGrande.total += agente.longDescription.length;
 				mediaGrande.atual++;
 			}
-			if (agente.emailPublico !== undefined) {
-				valor += 5;
+
+			if(validador>= 2){
+				valor+=1
 			}
-			if (agente.endereco !== undefined) {
-				valor += 2;
+			validador = 0
+
+			if (agente.emailPublico !== undefined) {
+				validador += 1;
 			}
 			if (agente.site !== undefined) {
-				valor += 10;
+				validador += 1;
 			}
 			if (agente.facebook !== undefined) {
-				valor += 1;
-			}
-			if (agente.facebook !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.twitter !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.instagram !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.linkedin !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.spotify !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.youtube !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
 			if (agente.pinterest !== undefined) {
-				valor += 1;
+				validador += 1;
 			}
-			if (agente.useOpportunityTab !== undefined) {
-				valor += 20;
+
+			if(validador >=2){
+				valor+=1
 			}
-			if (valor > 50) {
+
+			if (valor >=3) {
 				retorno.agentesOuro += 1;
-			} else if (valor > 45) {
+			} else if (valor == 2) {
 				retorno.agentesPrata += 1;
 			} else {
 				retorno.agentesBronze += 1;

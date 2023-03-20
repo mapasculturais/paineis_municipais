@@ -34,12 +34,18 @@
 	 */
 	let restanteLocais = [];
 	let verificar = municipio != 'ESTADO';
+	
+	let carregando
+	$: if(municipio!= ""){
+		carregando = [true, true]
+	}
 	$: tratarDadosInteresse(municipio, 'agent').then((Response) => {
 		// @ts-ignore
 		nomesAgentes = Response[0][0];
 		// @ts-ignore
 		valoresAgentes = Response[0][1];
 		restanteAgentes = Response[1];
+		carregando[0]=false
 	});
 	$: tratarDadosInteresse(municipio, 'space').then((Response) => {
 		// @ts-ignore
@@ -47,6 +53,7 @@
 		// @ts-ignore
 		valoresLocais = Response[0][1];
 		restanteLocais = Response[1];
+		carregando[1]=false
 	});
 	let tamanhos = [12, 20];
 	if (window.innerWidth <= 1200) {
@@ -169,7 +176,7 @@
 		</div>
 	{:else}
 		<div class="sem-resultado">
-			{#if municipio == 'ESTADO'}
+			{#if municipio == 'ESTADO' || carregando[0]}
 				<p>calculando</p>
 			{:else}
 				<p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
@@ -201,10 +208,10 @@
 		</div>
 	{:else}
 		<div class="sem-resultado">
-			{#if municipio == 'ESTADO'}
+			{#if municipio == 'ESTADO'  || carregando[1]}
 				<p>calculando</p>
 			{:else}
-				<p>Ainda não existem Agentes com áreas de atual cadastrados em {municipio}</p>
+				<p>Ainda não existem Espaços com áreas de atual cadastrados em {municipio}</p>
 			{/if}
 		</div>
 	{/if}
@@ -248,9 +255,7 @@
 		li {
 			padding-left: 2.5%;
 			padding-right: 2.5%;
-		}
-		ul {
-			font-size: 18;
+			font-size: 16px;
 		}
 
 		.container {
@@ -283,9 +288,7 @@
 		li {
 			padding-left: 2.5%;
 			padding-right: 2.5%;
-		}
-		ul {
-			font-size: 18;
+			font-size: 18px;
 		}
 		.segurarAmbos {
 			display: flex;
@@ -326,7 +329,7 @@
 		@media only screen and (min-width: 1200px) {
 			h2 {
 				text-align: center;
-				font-size: 28px;
+				font-size: 20px;
 				margin: 0px;
 				padding-bottom: 10px;
 			}
@@ -339,12 +342,13 @@
 			li {
 				padding-left: 0px;
 				padding-right: 0px;
+				font-size: 18px;
 			}
 
 			.chartContainer {
 				padding-top: 0.5%;
 				height: 100%;
-				width: 40%;
+				width: 65%;
 			}
 			.segurarAmbos {
 				display: flex;

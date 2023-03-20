@@ -141,6 +141,9 @@
 </div>
 
 <style>
+	* {
+		font-family: sans-serif;
+	}
 	.loading {
 		font-size: 30px;
 	}

@@ -2,7 +2,7 @@
 	import Comparativo from './Comparativo.svelte';
 	import Percentual from './Percentual.svelte';
 	import { acharSemelhantes } from './scripts/AcharSemelhantes';
-	import { avaliarAgentesMuni, numeroDadosMuni } from './scripts/PuxarDados';
+	import {numeroDadosMuni } from './scripts/PuxarDados';
 	import AreaDeAtuacao from './AreaDeAtuacao.svelte';
 	import AvaliacaoAgentes from './AvaliacaoAgentes.svelte';
 	/**
@@ -18,7 +18,6 @@
 	 * @type {number[]}
 	 */
 	let dadosMuni = [];
-	$: avaliarAgentesMuni(municipio);
 	$: numeroDadosMuni(municipio).then((response) => {
 		dadosMuni = response;
 	});
@@ -70,6 +69,9 @@
 						{/if}
 					{/each}
 				</ul>
+				<footer>
+					o cálculo de semelhança é feito a partir da comparação de PIB e população dos municipios.
+				</footer>
 			</div>
 		</div>
 	</div>
@@ -78,6 +80,10 @@
 <AvaliacaoAgentes {municipio} />
 
 <style>
+	footer {
+		margin: 5px;
+		font-size: 10px;
+	}
 	.descricao {
 		text-align: center;
 	}
@@ -149,7 +155,7 @@
 			text-align: center;
 			margin: 0px;
 			padding-top: 5px;
-			font-size: 30px;
+			font-size: 20px;
 		}
 		.similar h2 span {
 			color: red;
