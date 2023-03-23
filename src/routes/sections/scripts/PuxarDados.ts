@@ -358,14 +358,6 @@ async function avaliarAgentesMuni(municipio: string) {
 		agentesPrata: 0,
 		agentesOuro: 0
 	};
-	const dados = await axios.get('https://mapacultural.secult.ce.gov.br/api/agent/find', {
-		params: {
-			'@select':
-				'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,useOpportunityTab',
-			'@files' : '(downloads,gallery):url',
-			geoMunicipio: 'EQ(' + municipio + ')'
-		}
-	});
 	const mediapequeno = {
 		total: 0,
 		atual: 0
@@ -374,13 +366,27 @@ async function avaliarAgentesMuni(municipio: string) {
 		total: 0,
 		atual: 0
 	};
+	let terminou = false
+	let posicao = 1
+	let tamanho = 0
+	do {
+		const dados = await axios.get('https://mapacultural.secult.ce.gov.br/api/agent/find', {
+		params: {
+			'@select':
+				'shortDescription,longDescription,emailPublico,endereco,site,facebook,twitter,instagram,linkedin,spotify,youtube,pinterest,updateTimestamp',
+			'@files' : '(downloads,gallery):url',
+			geoMunicipio: 'EQ(' + municipio + ')',
+			'@limit': 500,
+			'@page' : posicao
+		}
+	});
 	dados.data.forEach(
-		(agente: { [x: string]: string | any[]; shortDescription: string | any[] | undefined; longDescription: string | any[] | undefined; emailPublico: undefined; site: undefined; facebook: undefined; twitter: undefined; instagram: undefined; linkedin: undefined; spotify: undefined; youtube: undefined; pinterest: undefined; useOpportunityTab: undefined; }) => {
+		(agente: { [x: string]: string | any[]; shortDescription: string | any[] | undefined; longDescription: string | any[] | undefined; emailPublico: undefined; site: undefined; facebook: undefined; twitter: undefined; instagram: undefined; linkedin: undefined; spotify: undefined; youtube: undefined; pinterest: undefined; updateTimestamp: { getTime: () => any; }; }) => {
 			//trocar analise para grupos, descrição, ponto de contato(redes sociais, etc), presença de mídias externas, data da ultima atualização de perfil
 			//apresentar estes dados individualmente em grupos, e analisar conjunto
 			let valor = 0;
 			let validador = 0;
-
+			tamanho++
 
 			if(agente["@files:downloads"]!=undefined){
 				validador+=agente["@files:downloads"].length
@@ -441,15 +447,33 @@ async function avaliarAgentesMuni(municipio: string) {
 				valor+=1
 			}
 
-			if (valor >=3) {
+			if(agente.updateTimestamp!=null){
+				let dataLida = agente.updateTimestamp.date
+					let data = new Date(dataLida)
+					let atual = new Date()
+					let diferenca = Math.abs(data-atual)
+					let anoEmMilisegundos = 1000*60*60*24*365
+					if(diferenca<=anoEmMilisegundos){
+						valor+=1
+					}
+			}
+			
+			
+			if (valor ==4) {
 				retorno.agentesOuro += 1;
-			} else if (valor == 2) {
+			} else if (valor >= 3) {
 				retorno.agentesPrata += 1;
 			} else {
 				retorno.agentesBronze += 1;
 			}
 		}
 	);
+		if(dados.data.length>0){
+			posicao+=1
+		}else{
+			terminou = true
+		}
+	}while (!terminou)
 	console.log('media pequeno + ' + mediapequeno.total / mediapequeno.atual);
 	console.log('media grande + ' + mediaGrande.total / mediaGrande.atual);
 	return retorno;
