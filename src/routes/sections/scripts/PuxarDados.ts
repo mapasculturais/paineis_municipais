@@ -358,14 +358,24 @@ async function avaliarAgentesMuni(municipio: string) {
 		agentesPrata: 0,
 		agentesOuro: 0
 	};
-	const mediapequeno = {
-		total: 0,
-		atual: 0
-	};
-	const mediaGrande = {
-		total: 0,
-		atual: 0
-	};
+	const dadosAreasAvaliacao = {
+		midias: {
+			nome: "Usuários com Mídias",
+			numero: 0
+		},
+		descricao : {
+			nome: "Usuários com Descrição",
+			numero: 0
+		},
+		contato : {
+			nome: "Usuários com Contato",
+			numero: 0
+		},
+		atulizado : {
+			nome: "Usuários Atualizados",
+			numero: 0
+		}
+	}
 	let terminou = false
 	let posicao = 1
 	let tamanho = 0
@@ -396,55 +406,54 @@ async function avaliarAgentesMuni(municipio: string) {
 			}
 			if(validador>=3){
 				valor+=1
+				dadosAreasAvaliacao.midias.numero+=1;
 			}
 			validador = 0
 
-			if (agente.shortDescription !== undefined) {
+			if (agente.shortDescription !== null) {
 				validador += parseInt((agente.shortDescription.length / 200).toFixed(0));
-				mediapequeno.total += agente.shortDescription.length;
-				mediapequeno.atual++;
 			}
-			if (agente.longDescription !== undefined) {
+			if (agente.longDescription !== null) {
 				validador += parseInt((agente.longDescription.length / 350).toFixed(0));
-				mediaGrande.total += agente.longDescription.length;
-				mediaGrande.atual++;
 			}
 
 			if(validador>= 2){
 				valor+=1
+				dadosAreasAvaliacao.descricao.numero+=1;
 			}
 			validador = 0
 
-			if (agente.emailPublico !== undefined) {
+			if (agente.emailPublico !== null) {
 				validador += 1;
 			}
-			if (agente.site !== undefined) {
+			if (agente.site !== null) {
 				validador += 1;
 			}
-			if (agente.facebook !== undefined) {
+			if (agente.facebook !== null) {
 				validador += 1;
 			}
-			if (agente.twitter !== undefined) {
+			if (agente.twitter !== null) {
 				validador += 1;
 			}
-			if (agente.instagram !== undefined) {
+			if (agente.instagram !== null) {
 				validador += 1;
 			}
-			if (agente.linkedin !== undefined) {
+			if (agente.linkedin !== null) {
 				validador += 1;
 			}
-			if (agente.spotify !== undefined) {
+			if (agente.spotify !== null) {
 				validador += 1;
 			}
-			if (agente.youtube !== undefined) {
+			if (agente.youtube !== null) {
 				validador += 1;
 			}
-			if (agente.pinterest !== undefined) {
+			if (agente.pinterest !== null) {
 				validador += 1;
 			}
 
 			if(validador >=2){
-				valor+=1
+				valor+=1;
+				dadosAreasAvaliacao.contato.numero+=1;
 			}
 
 			if(agente.updateTimestamp!=null){
@@ -454,7 +463,8 @@ async function avaliarAgentesMuni(municipio: string) {
 					let diferenca = Math.abs(data-atual)
 					let anoEmMilisegundos = 1000*60*60*24*365
 					if(diferenca<=anoEmMilisegundos){
-						valor+=1
+						valor+=1;
+						dadosAreasAvaliacao.atulizado.numero+=1;
 					}
 			}
 			
@@ -474,9 +484,7 @@ async function avaliarAgentesMuni(municipio: string) {
 			terminou = true
 		}
 	}while (!terminou)
-	console.log('media pequeno + ' + mediapequeno.total / mediapequeno.atual);
-	console.log('media grande + ' + mediaGrande.total / mediaGrande.atual);
-	return retorno;
+	return [retorno,dadosAreasAvaliacao,tamanho];
 }
 export {
 	areaDeAtuacao,

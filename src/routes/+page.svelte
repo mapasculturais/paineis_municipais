@@ -53,7 +53,7 @@
 	};
 
 	const submitValue = () => {
-		if (municipio) {
+		if (MUNICIPIOS.has(municipio)||municipio=="ESTADO") {
 			console.log('enviei ' + municipio);
 			valorMuncipio = municipio;
 		}

@@ -3,12 +3,15 @@
 
 	import { Chart } from 'svelte-echarts';
 	import { avaliarAgentesMuni } from './scripts/PuxarDados';
+	import BarraDeProgresso from './BarraDeProgresso.svelte';
 
 	/**
 	 * @type {string}
 	 */
 	export let municipio;
 	let ativo = false;
+	let dadosPercent
+	let total
 	let dados = {
 		agentesOuro: 0,
 		agentesPrata: 0,
@@ -18,8 +21,10 @@
 		ativo = false;
 	}
 	$: avaliarAgentesMuni(municipio).then((Response) => {
-		dados = Response;
+		dados = Response[0];
 		ativo = true;
+		dadosPercent = Response[1]
+		total = Response[2];
 	});
 
 	$: options = {
@@ -65,16 +70,36 @@
 		<div class="chartContainer">
 			<Chart {options} />
 		</div>
-		<p>
-			o municipio {municipio} possui {dados.agentesOuro} agentes classificados como ouro, {dados.agentesPrata}
-			agentes classificados como prata e {dados.agentesBronze} agentes classificados como bronze
-		</p>
+		<div class="textoPercentual">
+			<div class="percentual">
+				<BarraDeProgresso dados= {dadosPercent.midias} total = {total}></BarraDeProgresso>
+				<BarraDeProgresso dados= {dadosPercent.descricao} total = {total}></BarraDeProgresso>
+				<BarraDeProgresso dados= {dadosPercent.contato} total = {total}></BarraDeProgresso>
+				<BarraDeProgresso dados= {dadosPercent.atulizado} total = {total}></BarraDeProgresso>
+			</div>
+			<div>
+			<p>
+				o municipio {municipio} possui <span style="color:#ffd700; font-weight: bold;">{dados.agentesOuro}</span> agentes classificados como ouro, <span style="color: #c0c0c0;font-weight: bold;">{dados.agentesPrata}</span>
+				agentes classificados como prata e <span style="color: #cd7f32;font-weight: bold">{dados.agentesBronze}</span> agentes classificados como bronze, a análise acerca do nível do usuário leva em consideração 
+				as seguintes informações:
+			</p>
+				<ul>
+					<li>Presença de mídias dentro do perfil</li>
+					<li>Presença de descrição longa e curta</li>
+					<li>Presença de formas de contato</li>
+					<li>Manutenção de uma conta atualizada</li>
+				</ul>
+			</div>
+		</div>
 	{:else}
 		<p>Calculando</p>
 	{/if}
 </div>
 
 <style>
+	.textoPercentual{
+		display: flex;
+	}
 	.descricao {
 		text-align: center;
 	}
@@ -97,6 +122,9 @@
 		.chartContainer {
 			height: 320px;
 			width: 100%;
+		}
+		.textoPercentual {
+			display: block;
 		}
 	}
 
