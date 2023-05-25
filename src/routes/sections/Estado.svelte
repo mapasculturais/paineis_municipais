@@ -87,12 +87,6 @@
 
 <div class="descricao">
 	<h1>Analise estadual</h1>
-	<p>
-		Aqui está a análise dos números brutos de agentes individuais e coletivos inscritos, também como
-		o número de espaços cadastrados, tais dados quando acossiados a um municipio são apresentados no
-		gráfico abaixo ordenados de maior número de agentes individuais para menor( dado mais número do
-		mapas)
-	</p>
 </div>
 
 <div class="organize-info">

@@ -53,7 +53,7 @@
 	};
 
 	const submitValue = () => {
-		if (MUNICIPIOS.has(municipio)||municipio=="ESTADO") {
+		if (MUNICIPIOS.has(municipio) || municipio == 'ESTADO') {
 			console.log('enviei ' + municipio);
 			valorMuncipio = municipio;
 		}
@@ -111,7 +111,7 @@
 				<input
 					id="entrada-muni"
 					type="text"
-					placeholder="digitar municipio"
+					placeholder="Digite o nome do município"
 					bind:value={municipio}
 					on:input={filtrarMunicipios}
 					on:click={(event) => event.target.select()}
@@ -133,9 +133,7 @@
 	</div>
 	{#if valorMuncipio === 'ESTADO'}
 		<Estado />
-	{:else if valorMuncipio === ''}
-		<div class="loading">Digite o nome do município</div>
-	{:else}
+	{:else if valorMuncipio === ''}{:else}
 		<Municipio municipio={valorMuncipio} />
 	{/if}
 </div>
@@ -144,32 +142,6 @@
 	* {
 		font-family: sans-serif;
 	}
-	.loading {
-		font-size: 30px;
-	}
-
-	.loading:after {
-		overflow: hidden;
-		display: inline-block;
-		vertical-align: bottom;
-		-webkit-animation: ellipsis steps(4, end) 900ms infinite;
-		animation: ellipsis steps(4, end) 900ms infinite;
-		content: '\2026'; /* ascii code for the ellipsis character */
-		width: 0px;
-	}
-
-	@keyframes ellipsis {
-		to {
-			width: 1.25em;
-		}
-	}
-
-	@-webkit-keyframes ellipsis {
-		to {
-			width: 1.25em;
-		}
-	}
-
 	.descricao {
 		text-align: center;
 	}
@@ -230,8 +202,11 @@
 		}
 	}
 	@media only screen and (min-width: 768px) {
+		input[type='submit'] {
+			width: 25%;
+		}
 		form input {
-			width: 48%;
+			width: 66%;
 			align-self: center;
 		}
 		.container {
@@ -258,6 +233,9 @@
 	}
 
 	@media only screen and (min-width: 1200px) {
+		input[type='submit'] {
+			width: 300px;
+		}
 		div.autocomplete {
 			position: relative;
 			display: inline-block;

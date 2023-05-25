@@ -34,10 +34,10 @@
 	 */
 	let restanteLocais = [];
 	let verificar = municipio != 'ESTADO';
-	
-	let carregando
-	$: if(municipio!= ""){
-		carregando = [true, true]
+
+	let carregando;
+	$: if (municipio != '') {
+		carregando = [true, true];
 	}
 	$: tratarDadosInteresse(municipio, 'agent').then((Response) => {
 		// @ts-ignore
@@ -45,7 +45,7 @@
 		// @ts-ignore
 		valoresAgentes = Response[0][1];
 		restanteAgentes = Response[1];
-		carregando[0]=false
+		carregando[0] = false;
 	});
 	$: tratarDadosInteresse(municipio, 'space').then((Response) => {
 		// @ts-ignore
@@ -53,7 +53,7 @@
 		// @ts-ignore
 		valoresLocais = Response[0][1];
 		restanteLocais = Response[1];
-		carregando[1]=false
+		carregando[1] = false;
 	});
 	let tamanhos = [12, 20];
 	if (window.innerWidth <= 1200) {
@@ -145,10 +145,6 @@
 
 <div class="descricao">
 	<h1>Perfil e vocação do município</h1>
-	<p>
-		Com os dados das áreas de atuação dos agentes e espaços cadastrados, destacamos os interesses do
-		município, é possível também comparar os valores com os da região e com os do estado.
-	</p>
 </div>
 <div class="segurarAmbos">
 	{#if nomesAgentes.length > 0}
@@ -208,7 +204,7 @@
 		</div>
 	{:else}
 		<div class="sem-resultado">
-			{#if municipio == 'ESTADO'  || carregando[1]}
+			{#if municipio == 'ESTADO' || carregando[1]}
 				<p>calculando</p>
 			{:else}
 				<p>Ainda não existem Espaços com áreas de atual cadastrados em {municipio}</p>
@@ -236,7 +232,6 @@
 		font-weight: bold;
 	}
 	li {
-		font-size: 24px;
 		margin-bottom: 3px;
 		text-align: left;
 		list-style-type: none;
@@ -342,7 +337,7 @@
 			li {
 				padding-left: 0px;
 				padding-right: 0px;
-				font-size: 18px;
+				font-size: 16px;
 			}
 
 			.chartContainer {

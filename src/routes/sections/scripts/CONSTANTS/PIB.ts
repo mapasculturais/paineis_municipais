@@ -1,5 +1,5 @@
 //estimativa IBGE 2019
-const PIB = new Map<string,number>();
+const PIB = new Map<string, number>();
 
 PIB.set('BELA CRUZ', 268201);
 PIB.set('CANINDÉ', 888695);

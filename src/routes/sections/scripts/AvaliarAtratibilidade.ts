@@ -1,5 +1,5 @@
-import { PIB } from "./CONSTANTS/PIB";
-import { POPULACAO } from "./CONSTANTS/POPULACAO";
+import { PIB } from './CONSTANTS/PIB';
+import { POPULACAO } from './CONSTANTS/POPULACAO';
 
 /*
 
@@ -16,21 +16,20 @@ de filtrar os municipio dados dados de interesse (população, pib, áreas de at
 
 */
 
-function avaliar(tiposdeAgentes: { agentesOuro: number; agentesPrata: number; agentesBronze: number }, muncipio : string){
-    let score =0
-    const pesos = [3,2,1]
-    score += (tiposdeAgentes.agentesOuro*pesos[0])
-    score += (tiposdeAgentes.agentesPrata*pesos[1])
-    score += (tiposdeAgentes.agentesBronze*pesos[2])
-    let atratibilidade
-    atratibilidade = score*(PIB.get(muncipio)!/100000)
-    atratibilidade = atratibilidade/(POPULACAO.get(muncipio)!/10000)
+function avaliar(
+	tiposdeAgentes: { agentesOuro: number; agentesPrata: number; agentesBronze: number },
+	muncipio: string
+) {
+	let score = 0;
+	const pesos = [3, 2, 1];
+	score += tiposdeAgentes.agentesOuro * pesos[0];
+	score += tiposdeAgentes.agentesPrata * pesos[1];
+	score += tiposdeAgentes.agentesBronze * pesos[2];
+	let atratibilidade;
+	atratibilidade = score * (PIB.get(muncipio)! / 100000);
+	atratibilidade = atratibilidade / (POPULACAO.get(muncipio)! / 10000);
 
-  
-
-
-
-    return atratibilidade
+	return atratibilidade;
 }
 
-export default avaliar
+export default avaliar;

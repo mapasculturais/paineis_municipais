@@ -1,6 +1,6 @@
 //estimativa IBGE 2021
 
-const POPULACAO = new Map<string,number>();
+const POPULACAO = new Map<string, number>();
 
 POPULACAO.set('BELA CRUZ', 32851);
 POPULACAO.set('CANINDÉ', 77484);

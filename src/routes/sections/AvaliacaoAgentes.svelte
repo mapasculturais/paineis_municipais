@@ -10,8 +10,8 @@
 	 */
 	export let municipio;
 	let ativo = false;
-	let dadosPercent
-	let total
+	let dadosPercent;
+	let total;
 	let dados = {
 		agentesOuro: 0,
 		agentesPrata: 0,
@@ -23,7 +23,7 @@
 	$: avaliarAgentesMuni(municipio).then((Response) => {
 		dados = Response[0];
 		ativo = true;
-		dadosPercent = Response[1]
+		dadosPercent = Response[1];
 		total = Response[2];
 	});
 
@@ -34,7 +34,29 @@
 			left: 'center'
 		},
 		tooltip: {
-			trigger: 'item'
+			trigger: 'item',
+			formatter: '{b}: {c} ({d}%)'
+		},
+		label: {
+			formatter: '{b|{b}：}{c}  {per|{d}%}  ',
+			backgroundColor: '#F6F8FC',
+			borderColor: '#8C8D8E',
+			borderWidth: 1,
+			borderRadius: 4,
+			rich: {
+				b: {
+					color: '#4C5058',
+					fontSize: 14,
+					fontWeight: 'bold',
+					lineHeight: 33
+				},
+				per: {
+					color: '#fff',
+					backgroundColor: '#4C5058',
+					padding: [3, 4],
+					borderRadius: 4
+				}
+			}
 		},
 		series: [
 			{
@@ -59,11 +81,6 @@
 
 <div class="descricao">
 	<h1>Analise do Nível de Agente</h1>
-	<p>
-		Usando-se de dados como presença e tamanho de descrição, disponibilização de dados públicos e a
-		participação na aba oportunidades todos os agentes do municipio são classificados entre Agentes
-		Ouro, Agentes Prata e Agentes Bronze.
-	</p>
 </div>
 <div class="container">
 	{#if ativo}
@@ -72,22 +89,26 @@
 		</div>
 		<div class="textoPercentual">
 			<div class="percentual">
-				<BarraDeProgresso dados= {dadosPercent.midias} total = {total}></BarraDeProgresso>
-				<BarraDeProgresso dados= {dadosPercent.descricao} total = {total}></BarraDeProgresso>
-				<BarraDeProgresso dados= {dadosPercent.contato} total = {total}></BarraDeProgresso>
-				<BarraDeProgresso dados= {dadosPercent.atulizado} total = {total}></BarraDeProgresso>
+				<BarraDeProgresso dados={dadosPercent.midias} {total} />
+				<BarraDeProgresso dados={dadosPercent.descricao} {total} />
+				<BarraDeProgresso dados={dadosPercent.contato} {total} />
+				<BarraDeProgresso dados={dadosPercent.atulizado} {total} />
 			</div>
 			<div>
-			<p>
-				o municipio {municipio} possui <span style="color:#ffd700; font-weight: bold;">{dados.agentesOuro}</span> agentes classificados como ouro, <span style="color: #c0c0c0;font-weight: bold;">{dados.agentesPrata}</span>
-				agentes classificados como prata e <span style="color: #cd7f32;font-weight: bold">{dados.agentesBronze}</span> agentes classificados como bronze, a análise acerca do nível do usuário leva em consideração 
-				as seguintes informações:
-			</p>
+				<p>
+					o municipio {municipio} possui
+					<span style="color:#ffd700; font-weight: bold;">{dados.agentesOuro}</span>
+					agentes classificados como ouro,
+					<span style="color: #c0c0c0;font-weight: bold;">{dados.agentesPrata}</span>
+					agentes classificados como prata e
+					<span style="color: #cd7f32;font-weight: bold">{dados.agentesBronze}</span> agentes classificados
+					como bronze, a análise acerca do nível do usuário leva em consideração as seguintes informações:
+				</p>
 				<ul>
 					<li>Presença de mídias dentro do perfil</li>
 					<li>Presença de descrição longa e curta</li>
 					<li>Presença de formas de contato</li>
-					<li>Manutenção de uma conta atualizada</li>
+					<li>Manutenção de uma conta atualizada (dentro de 1 ano)</li>
 				</ul>
 			</div>
 		</div>
@@ -97,7 +118,7 @@
 </div>
 
 <style>
-	.textoPercentual{
+	.textoPercentual {
 		display: flex;
 	}
 	.descricao {

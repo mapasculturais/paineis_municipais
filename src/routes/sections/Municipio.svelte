@@ -2,7 +2,7 @@
 	import Comparativo from './Comparativo.svelte';
 	import Percentual from './Percentual.svelte';
 	import { acharSemelhantes } from './scripts/AcharSemelhantes';
-	import {numeroDadosMuni } from './scripts/PuxarDados';
+	import { numeroDadosMuni } from './scripts/PuxarDados';
 	import AreaDeAtuacao from './AreaDeAtuacao.svelte';
 	import AvaliacaoAgentes from './AvaliacaoAgentes.svelte';
 	/**
@@ -23,17 +23,28 @@
 	});
 
 	$: semelhantes = acharSemelhantes(municipio);
+
+	/**
+	 * @param {string} entrada
+	 */
+	function formatarTexto(entrada) {
+		const palavras = entrada.split(' ');
+		const palavrasConvertidas = palavras.map((/** @type {string} */ palavra) => {
+			if (palavra.length > 2) {
+				const primeiraLetra = palavra.charAt(0).toUpperCase();
+				const resto = palavra.slice(1).toLowerCase();
+				return primeiraLetra + resto;
+			} else {
+				return palavra.toLowerCase();
+			}
+		});
+		return palavrasConvertidas.join(' ');
+	}
 </script>
 
 <div style="display: block;">
 	<div class="descricao">
 		<h1>Dimencionamento do campo cultural</h1>
-		<p>
-			Abaixo você encontra os principais números do município: quantidade de Agentes Culturais
-			registrados e espaços cadastrados; além de um comparativo com municípios com população e PIB
-			semelhantes. No gráfico da esquerda é feito uma comparação entre a participação do município
-			no Mapa Cultural do Ceará e a participação do município na sua macro região.
-		</p>
 	</div>
 	<div class="organize">
 		<div class="organize2">
@@ -65,7 +76,7 @@
 				<ul>
 					{#each semelhantes as individuais, i}
 						{#if i < semelhantes.length - 1}
-							<li>{individuais}</li>
+							<li>{formatarTexto(individuais)}</li>
 						{/if}
 					{/each}
 				</ul>
@@ -165,8 +176,8 @@
 		}
 		.similar ul li {
 			font-size: 18px;
-			text-align: center;
 			padding-bottom: 8px;
+			padding-left: 15px;
 		}
 	}
 
@@ -240,7 +251,6 @@
 		}
 		.similar ul li {
 			font-size: 16px;
-			text-align: center;
 			padding-bottom: 5px;
 		}
 	}
